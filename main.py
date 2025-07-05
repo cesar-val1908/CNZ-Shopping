@@ -50,9 +50,10 @@ def ai_bot_response(user_message, conversation_history):
             "properties": {
                 "question": {"type": "string", "description": "The question to ask the user."},
                 "reason": {"type": "string", "description": "The reason for asking this question."},
-                "slider_range": {"type": "string", "description": "The range for the slider, e.g., '10-5000'."}
+                "min": {"type": "integer", "description": "The minimum value for the slider."},
+                "max": {"type": "integer", "description": "The maximum value for the slider."}
             },
-            "required": ["question", "reason", "slider_range"]
+            "required": ["question", "reason", "slider_range", "min", "max"]
         }
     },
     {
@@ -103,13 +104,6 @@ def ai_bot_response(user_message, conversation_history):
         input=messages,
         tools=tools
     )
-    # response = client.chat.responses.create(
-    #     model="gpt-4o",
-    #     input=messages,
-    #     tools=tools,
-    #     tool_choice="auto",
-    #     max_tokens=1000
-    # )
 
     # Check for a function_call event in the response
     function_event = None
@@ -133,7 +127,8 @@ def ai_bot_response(user_message, conversation_history):
                 "type": "question_slider",
                 "question": function_args.get("question"),
                 "reasoning": function_args.get("reason"),
-                "slider_range": function_args.get("slider_range")
+                "min": function_args.get("min"),
+                "max": function_args.get("max")
             })
         elif function_name == "createOpenEndedQuestion":
             return json.dumps({
