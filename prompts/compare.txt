@@ -30,10 +30,14 @@ Rules to follow:
 
 6️. Formatting instructions:
 - Return output **strictly as a JSON object matching this structure**:
-  - "table": array of items with "item", "price", and "specs" (specs = object with characteristics as keys, values as strings with optional "(BEST)" label).
-  - "pros_cons": array of objects with each item’s "item", "pros", and "cons" fields.
-  - "distinctions": string describing important differences not covered in specs or pros/cons.
-  - "recommend": string with the final purchase recommendation and reasoning.
+- "table": array of items with "item", "price", and "specs" (specs = object with characteristics as keys, values as strings with optional "(BEST)" label).
+- "pros_cons": array of objects with each item’s "item", "pros", and "cons" fields.
+- "distinctions": string describing important differences not covered in specs or pros/cons.
+- "recommend": string with the final purchase recommendation and reasoning.
+- Return output only as JSON matching the schema — do not use plain text, markdown, or extra commentary.
+
+7. Output instructions:
+- Return output only as JSON matching the schema — do not use plain text, markdown, or extra commentary.
 
 ****IMPORTANT DIRECTION: Return output only as JSON matching the schema — do not use plain text, markdown, or extra commentary.
 
