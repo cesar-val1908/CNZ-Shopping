@@ -51,4 +51,5 @@ def get_comparison(item1, item2):
         tools = tools,
     )
 
+
     return json.loads(response.output_text)
