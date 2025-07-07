@@ -1,3 +1,16 @@
+#modifed compare.py so that it can input two items and return a comparison
+import os
+from openai import OpenAI
+from dotenv import load_dotenv
+import json
+
+load_dotenv()
+
+client = OpenAI(
+    api_key=os.getenv("OPENAI_API_KEY")
+)
+
+
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -8,25 +21,22 @@ client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
+def get_comparison(item1, item2):
+    with open('prompts/compare.txt', 'r', encoding='utf-8') as file:
+        prompt = file.read()
 
-with open('prompts/compare.txt', 'r', encoding='utf-8') as file:
-    prompt = file.read()   
+    user_message = f"Compare {item1} and {item2}"
 
-conversation_history = []
-
-def ai_bot_response(user_message):
-    ai_prompt = prompt
-    
     messages = [
         {
-        "role": "system",
-        "content": ai_prompt
+            "role": "system",
+            "content": prompt
         },
-        *conversation_history
+        {
+            "role": "user",
+            "content": user_message
+        }
     ]
-    
-    messages.extend(conversation_history) 
-    messages.append({"role": "user", "content": user_message})
 
     tools = [
         {
@@ -40,14 +50,6 @@ def ai_bot_response(user_message):
         max_output_tokens=10000,
         tools = tools,
     )
-    # print("OpenAI API Raw Response:", response) # Keep this for detailed debugging
-    print(response.output_text)
-
-# Todo:
-# search_product():   Return in a JSON structure.
 
 
-
-user_message1 = input("Start Here:")
-
-ai_bot_response(user_message1)
+    return json.loads(response.output_text)

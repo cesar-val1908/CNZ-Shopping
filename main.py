@@ -4,6 +4,7 @@ import json  # use Python’s json for parsing
 from openai import OpenAI
 from waitress import serve
 from dotenv import load_dotenv
+from Compare import get_comparison
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -150,6 +151,28 @@ def ai_bot_response(user_message, conversation_history):
 def home():
     session['conversation_history'] = []
     return render_template("index.html")
+
+
+@app.route("/compare", methods=["GET"])
+def compare_page():
+    return render_template("compare.html")
+
+
+@app.route("/compare", methods=["POST"])
+def compare_items():
+    data = request.json
+    item1 = data.get("item1")
+    item2 = data.get("item2")
+
+    if not item1 or not item2:
+        return jsonify({"error": "Please provide both items for comparison."}), 400
+
+    try:
+        comparison_result = get_comparison(item1, item2)
+        return jsonify({"comparison": comparison_result})
+    except Exception as e:
+        print(f"Error during comparison: {e}")
+        return jsonify({"error": "An unexpected error occurred."}), 500
 
 
 @app.route("/get_response", methods=["POST"])
