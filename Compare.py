@@ -43,7 +43,7 @@ def ai_bot_response(user_message):
     # print("OpenAI API Raw Response:", response) # Keep this for detailed debugging
     print(response.output_text)
 
-
+# Todo:
 # search_product():   Return in a JSON structure.
 
 

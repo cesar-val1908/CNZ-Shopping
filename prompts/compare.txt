@@ -26,7 +26,7 @@ Rules to follow:
 
 5️. Make a final purchase recommendation.
 - Provide a clear, specific recommendation in the "recommend" field.
-- Explain why the recommended item is the best choice, referencing key specs, pros, or distinctions.
+- Explain why the recommended item is the best choice, referencing key specs, pros, or distinctions.   ****************
 
 6️. Formatting instructions:
 - Return output **strictly as a JSON object matching this structure**:
