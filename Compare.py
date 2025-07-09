@@ -45,10 +45,9 @@ def get_comparison(item1, item2):
     ]
     
     response = client.responses.create(
-        model="gpt-4o-mini",  #****Change to gpt-4o to get the full accuracy of the model****
+        model="gpt-4o",  #****Change to gpt-4o for best results****
         input=messages,
-        max_output_tokens=10000,
-        tools = tools,
+        tools = tools
     )
 
 
