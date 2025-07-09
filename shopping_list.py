@@ -18,9 +18,10 @@ def build_prompt(event_type, rejected_items, accepted_items):
     prompt = f"""
 You are a helpful shopping assistant. A user is preparing for an {event_type}.
 
-Recommend **only one** essential item at a time. DO NOT repeat any of the following items:
+Recommend **only one** essential item at a time. 
 
-{json.dumps(rejected_items)}, {json.dumps(accepted_items)}
+DO NOT repeat any of the following items:
+    {json.dumps(rejected_items)},  {json.dumps(accepted_items)}
 
 Format your response as JSON like this:
 {{
