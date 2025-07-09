@@ -20,7 +20,7 @@ Rules to follow:
 - Provide this as a clear string in the "distinctions" field of the JSON.
 
 4️. Provide pros and cons for each item.
-- Each item’s pros and cons go into the "pros_cons" array, as separate "pros" and "cons" strings.
+- Each item’s pros and cons must be included as "pros" and "cons" fields inside the corresponding item in the "table" array.
 - Provide pros and cons for each item as **concise, comma-separated strings**.
 - Include only relevant advantages and disadvantages that help inform the purchasing decision.
 
@@ -30,8 +30,7 @@ Rules to follow:
 
 6️. Formatting instructions:
 - Return output **strictly as a JSON object matching this structure**:
-- "table": array of items with "item", "price", and "specs" (specs = object with characteristics as keys, values as strings with optional "(BEST)" label).
-- "pros_cons": array of objects with each item’s "item", "pros", and "cons" fields.
+- "table": array of items with "item", "price", "specs" (object with characteristics as keys, values as strings with optional "(BEST)" label), "pros", and "cons".
 - "distinctions": string describing important differences not covered in specs or pros/cons.
 - "recommend": string with the final purchase recommendation and reasoning.
 - Return output only as JSON matching the schema — do not use plain text, markdown, or extra commentary.
@@ -50,7 +49,9 @@ Example JSON format:
       "specs": {
         "Characteristic 2": "Value 2",
         "Characteristic 3": "Value 3 (BEST)"
-      }
+      },
+      "pros": "Affordable, lightweight, durable",
+      "cons": "Average battery life"
     },
     {
       "item": "Item Two",
@@ -58,17 +59,7 @@ Example JSON format:
       "specs": {
         "Characteristic 2": "Value 2 (BEST)",
         "Characteristic 3": "Value 3"
-      }
-    }
-  ],
-  "pros_cons": [
-    {
-      "item": "Item One",
-      "pros": "Affordable, lightweight, durable",
-      "cons": "Average battery life"
-    },
-    {
-      "item": "Item Two",
+      },
       "pros": "Best display, long battery life",
       "cons": "Higher price"
     }
@@ -77,4 +68,4 @@ Example JSON format:
   "recommend": "My recommendation is Item One because it offers the best value for the price."
 }
 
-*Do not add any explanations, notes, or extra fields beyond what is shown in the example JSON structure.
+**Do not add any explanations, notes, or extra fields beyond what is shown in the example JSON structure.**
