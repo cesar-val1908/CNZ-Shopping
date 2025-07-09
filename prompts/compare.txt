@@ -65,7 +65,7 @@ Example JSON format:
     }
   ],
   "distinctions": "Item Two offers a brighter display but costs more.",
-  "recommend": "My recommendation is Item One because it offers the best value for the price."
+  "recommend": "Our recommendation is Item One because it offers the best value for the price."
 }
 
 **Do not add any explanations, notes, or extra fields beyond what is shown in the example JSON structure.**
