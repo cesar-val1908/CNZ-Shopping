@@ -47,7 +47,8 @@ def get_comparison(item1, item2):
     response = client.responses.create(
         model="gpt-4o",  #****Change to gpt-4o for best results****
         input=messages,
-        tools = tools
+        tools = tools,
+        max_tokens=10000 #Remove when doing final testing/presenting
     )
 
 
