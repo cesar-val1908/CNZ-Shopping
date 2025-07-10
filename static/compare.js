@@ -1,17 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
     const compareBtn = document.getElementById("compare-btn");
+    const inputsWrapper = document.querySelector(".inputs-wrapper");
+    const addBtn = document.getElementById("add-btn");
     const item1Input = document.getElementById("item1-input");
     const item2Input = document.getElementById("item2-input");
     const resultsDiv = document.getElementById("comparison-results");
 
+    addBtn.addEventListener("click", () => {
+        const newInput = document.createElement("input");
+        newInput.classList.add("item-input");
+        newInput.type = "text";
+        newInput.placeholder = "Enter item name";
+        inputsWrapper.appendChild(newInput);
+    });
     compareBtn.addEventListener("click", async () => {
-        const item1 = item1Input.value;
-        const item2 = item2Input.value;
 
-        if (!item1 || !item2) {
-            resultsDiv.innerHTML = "<p>Please enter both items to compare.</p>";
-            return;
-        }
+        const inputs = inputsWrapper.querySelectorAll('input[type="text"]');
+        const values = Array.from(inputs).map(input => input.value);
+
+        console.log("Values to compare:", values.toString());
 
         resultsDiv.innerHTML = "<p>Loading comparison...</p>";
 
@@ -21,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ item1, item2 }),
+                body: JSON.stringify({ items: values }),
             });
 
             const data = await response.json();

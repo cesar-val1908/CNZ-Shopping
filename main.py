@@ -161,14 +161,10 @@ def compare_page():
 @app.route("/compare", methods=["POST"])
 def compare_items():
     data = request.json
-    item1 = data.get("item1")
-    item2 = data.get("item2")
-
-    if not item1 or not item2:
-        return jsonify({"error": "Please provide both items for comparison."}), 400
+    items = data.get("items", [])
 
     try:
-        comparison_result = get_comparison(item1, item2)
+        comparison_result = get_comparison(items)
         return jsonify({"comparison": comparison_result})
     except Exception as e:
         print(f"Error during comparison: {e}")
