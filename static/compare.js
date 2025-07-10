@@ -60,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     itemsWrapper.innerHTML += `
                         <div class="comparison-item">
                             <h4>${element.item}</h4>
+                            <h4>Price: ${element.price}</h4>
                             <p class="pros"> Pros: ${element.pros}</p>
                             <p class="cons"> Cons: ${element.cons}</p>
                             <br></br>
