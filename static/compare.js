@@ -6,6 +6,44 @@ document.addEventListener("DOMContentLoaded", () => {
     const item2Input = document.getElementById("item2-input");
     const resultsDiv = document.getElementById("comparison-results");
 
+    const spinnerFrames = [
+        "⠁",
+        "⠂",
+        "⠄",
+        "⡀",
+        "⡈",
+        "⡐",
+        "⡠",
+        "⣀",
+        "⣁",
+        "⣂",
+        "⣄",
+        "⣌",
+        "⣔",
+        "⣤",
+        "⣥",
+        "⣦",
+        "⣮",
+        "⣶",
+        "⣷",
+        "⣿",
+        "⡿",
+        "⠿",
+        "⢟",
+        "⠟",
+        "⡛",
+        "⠛",
+        "⠫",
+        "⢋",
+        "⠋",
+        "⠍",
+        "⡉",
+        "⠉",
+        "⠑",
+        "⠡",
+        "⢁"
+    ];
+
     addBtn.addEventListener("click", () => {
         const newInput = document.createElement("input");
         newInput.classList.add("item-input");
@@ -20,7 +58,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("Values to compare:", values.toString());
 
-        resultsDiv.innerHTML = "<p>Loading comparison...</p>";
+        let frameIndex = 0;
+        resultsDiv.innerHTML = `<p id="compare-spinner"><span style="white-space:pre">${spinnerFrames[frameIndex]}</span> Loading comparison</p>`;
+        const spinnerElem = document.getElementById("compare-spinner");
+        const spinnerInterval = setInterval(() => {
+            frameIndex = (frameIndex + 1) % spinnerFrames.length;
+            spinnerElem.innerHTML = `<span style="white-space:pre">${spinnerFrames[frameIndex]}</span> Loading comparison`;
+        }, 70);
 
         try {
             const response = await fetch("/compare", {
@@ -31,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({ items: values }),
             });
 
+            clearInterval(spinnerInterval);
             const data = await response.json();
             const output = {
                 distinctions: data.comparison.distinctions,
@@ -77,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
         } catch (error) {
+            clearInterval(spinnerInterval);
             console.error("Error fetching comparison:", error);
             resultsDiv.innerHTML = "<p>An error occurred while fetching the comparison. Please try again later.</p>";
         }
