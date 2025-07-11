@@ -1,10 +1,21 @@
-function getBotResponse(event) {
-  event.preventDefault();
-  const userInputField = document.getElementById("user-input");
-  const userMessage = userInputField.value;
+const spinnerFrames = [
+  "⣼",
+  "⣹",
+  "⢻",
+  "⠿",
+  "⡟",
+  "⣏",
+  "⣧",
+  "⣶"
+];
 
-  appendMessage("user", userMessage);
-  userInputField.value = "";
+function fetchResponse(userMessage) {
+  const botMessageElement = appendMessage("bot", "");
+  let frameIndex = 0;
+  const spinnerInterval = setInterval(() => {
+    botMessageElement.innerHTML = `<p>${spinnerFrames[frameIndex]}</p>`;
+    frameIndex = (frameIndex + 1) % spinnerFrames.length;
+  }, 70);
 
   fetch("/get_response", {
     method: "POST",
@@ -13,16 +24,32 @@ function getBotResponse(event) {
   })
     .then((response) => response.json())
     .then((data) => {
+      clearInterval(spinnerInterval);
+      botMessageElement.remove();
       try {
         const botResponse = JSON.parse(data.response);
         handleBotResponse(botResponse, data.response);
       } catch (e) {
         appendMessage("bot", data.response);
       }
-    }).catch((error) => {
+    })
+    .catch((error) => {
+      clearInterval(spinnerInterval);
+      botMessageElement.innerHTML = `<p>Sorry, something went wrong.</p>`;
       console.error("Error:", error);
-      appendMessage("bot", "Sorry, something went wrong.");
     });
+}
+
+function getBotResponse(event) {
+  event.preventDefault();
+  const userInputField = document.getElementById("user-input");
+  const userMessage = userInputField.value.trim();
+
+  if (userMessage) {
+    appendMessage("user", userMessage);
+    userInputField.value = "";
+    fetchResponse(userMessage);
+  }
 }
 
 function handleBotResponse(botResponse, rawResponse) {
@@ -46,6 +73,7 @@ function appendMessage(sender, text) {
   messageElement.innerHTML = `<p>${text}</p>`;
   chatMessages.appendChild(messageElement);
   chatMessages.scrollTop = chatMessages.scrollHeight;
+  return messageElement;
 }
 
 function displayMultipleChoiceQuestion(questionData) {
@@ -78,24 +106,7 @@ function displayMultipleChoiceQuestion(questionData) {
     const selected = form.querySelector(`input[name="${radioName}"]:checked`);
     if (selected) {
       appendMessage("user", selected.value);
-
-      fetch("/get_response", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_input: selected.value }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          try {
-            const botResponse = JSON.parse(data.response);
-            handleBotResponse(botResponse, data.response);
-          } catch (e) {
-            appendMessage("bot", data.response);
-          }
-        }).catch((error) => {
-          console.error("Error:", error);
-          appendMessage("bot", "Sorry, something went wrong.");
-        });
+      fetchResponse(selected.value);
 
       // Disable form after submission so user cant send more message while the ai computes
       nextBtn.disabled = true;
@@ -138,29 +149,11 @@ function displaySliderQuestion(questionData) {
   });
   nextBtn.addEventListener('click', function () {
     appendMessage("user", slider.value);
+    fetchResponse(slider.value);
 
-    fetch("/get_response", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_input: slider.value }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        try {
-          const botResponse = JSON.parse(data.response);
-          handleBotResponse(botResponse, data.response);
-        } catch (e) {
-          appendMessage("bot", data.response);
-        }
-      }).catch((error) => {
-        console.error("Error:", error);
-        appendMessage("bot", "Sorry, something went wrong.");
-      });
     nextBtn.disabled = true;
     slider.disabled = true;
-
   });
-
 }
 
 function displayOpenEndedQuestion(questionData) {
@@ -190,8 +183,16 @@ function displayRecommendations(recommendationsData) {
     htmlContent += `</div>`;
   });
 
-
   messageElement.innerHTML = htmlContent;
   chatMessages.appendChild(messageElement);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const userInputField = document.getElementById("user-input");
+  userInputField.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      getBotResponse(event);
+    }
+  });
+});

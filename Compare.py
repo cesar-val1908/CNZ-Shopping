@@ -1,9 +1,9 @@
-#modifed compare.py so that it can input two items and return a comparison
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
 import json
 
+
 load_dotenv()
 
 client = OpenAI(
@@ -21,11 +21,13 @@ client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
-def get_comparison(item1, item2):
+def get_comparison(items):
+   
+    items_str = ", ".join(items)
     with open('prompts/compare.txt', 'r', encoding='utf-8') as file:
         prompt = file.read()
 
-    user_message = f"Compare {item1} and {item2}"
+    user_message = f"Compare the following items: {items_str}"
 
     messages = [
         {
