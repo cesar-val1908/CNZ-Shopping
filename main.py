@@ -165,7 +165,7 @@ def compare_items():
 
     try:
         comparison_result = get_comparison(items)
-        return jsonify({"comparison": comparison_result})
+        return jsonify(comparison_result)  
     except Exception as e:
         print(f"Error during comparison: {e}")
         return jsonify({"error": "An unexpected error occurred."}), 500

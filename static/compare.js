@@ -77,10 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             clearInterval(spinnerInterval);
             const data = await response.json();
+
+            if (!data.table) {
+                resultsDiv.innerHTML = `<p>Error: No comparison data returned. Please check your input or try again later.</p>`;
+                return;
+            }
+
             const output = {
-                distinctions: data.comparison.distinctions,
-                recommendations: data.comparison.recommend,
-                comparison: data.comparison.table,
+                distinctions: data.distinctions,
+                recommendations: data.recommend,
+                comparison: data.table,
 
             }
 
