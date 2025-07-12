@@ -26,7 +26,7 @@ Rules to follow:
 
 5️. Make a final purchase recommendation.
 - Provide a clear, specific recommendation in the "recommend" field.
-- Explain why the recommended item is the best choice, referencing key specs, pros, or distinctions.   ****************
+- Explain why the recommended item is the best choice, referencing key specs, pros, or distinctions.  
 
 6️. Formatting instructions:
 - Return output **strictly as a JSON object matching this structure**:
@@ -68,4 +68,4 @@ Example JSON format:
   "recommend": "Our recommendation is Item One because it offers the best value for the price."
 }
 
-**Do not add any explanations, notes, or extra fields beyond what is shown in the example JSON structure.**
+**ONLY output a valid JSON object matching the example above. Do NOT include any text, explanation, or formatting outside the JSON object.**

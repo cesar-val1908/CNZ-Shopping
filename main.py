@@ -165,7 +165,7 @@ def compare_items():
 
     try:
         comparison_result = get_comparison(items)
-        return jsonify({"comparison": comparison_result})
+        return jsonify(comparison_result)  
     except Exception as e:
         print(f"Error during comparison: {e}")
         return jsonify({"error": "An unexpected error occurred."}), 500
@@ -184,6 +184,25 @@ def get_response():
     conversation_history.append({"role": "assistant", "content": bot_response})
     session['conversation_history'] = conversation_history
     return jsonify({"response": bot_response})
+
+
+@app.route("/shopping-list", methods=["GET"])
+def shopping_list_page():
+    return render_template("shopping_list.html")
+
+@app.route("/get_shopping_list_item", methods=["POST"])
+def get_shopping_list_item():
+    data = request.json
+    event = data.get("event")
+    rejected = data.get("rejected", [])
+    accepted = data.get("accepted", [])
+    try:
+        # You may need to refactor shopping_list.py to expose recommend_next_item for import
+        from shopping_list import recommend_next_item
+        item = recommend_next_item(event, accepted, rejected)
+        return jsonify(item)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

@@ -22,7 +22,6 @@ client = OpenAI(
 )
 
 def get_comparison(items):
-   
     items_str = ", ".join(items)
     with open('prompts/compare.txt', 'r', encoding='utf-8') as file:
         prompt = file.read()
@@ -30,28 +29,21 @@ def get_comparison(items):
     user_message = f"Compare the following items: {items_str}"
 
     messages = [
-        {
-            "role": "system",
-            "content": prompt
-        },
-        {
-            "role": "user",
-            "content": user_message
-        }
+        {"role": "system", "content": prompt},
+        {"role": "user", "content": user_message}
     ]
 
-    tools = [
-        {
-            "type": "web_search_preview"
-        }
-    ]
+    tools = [{"type": "web_search_preview"}]
     
     response = client.responses.create(
-        model="gpt-4o",  #****Change to gpt-4o for best results****
+        model="gpt-4o",
         input=messages,
-        tools = tools,
-        max_tokens=10000 #Remove when doing final testing/presenting
+        tools=tools,
+        # max_output_tokens=10000
     )
 
-
-    return json.loads(response.output_text)
+    try:
+        result = json.loads(response.output_text)
+        return result
+    except Exception as e:
+        return {"error": f"Error parsing response: {str(e)}", "comparison": None}

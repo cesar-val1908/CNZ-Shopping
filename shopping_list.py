@@ -78,8 +78,8 @@ def get_real_product_data(query):
             # "link": "https://example.com"
         }
 
-def recommend_next_item(event_type):
-    prompt = build_prompt(event_type, rejected_items, [item["item"] for item in accepted_items])
+def recommend_next_item(event, accepted, rejected):
+    prompt = build_prompt(event, rejected, [item["item"] for item in accepted])
 
     messages = [
         {"role": "system", "content": "You're a smart shopping assistant."},
@@ -104,35 +104,36 @@ def recommend_next_item(event_type):
     return item_data
 
 if __name__ == "__main__":
-    # Get user input
-    event = input("What event are you shopping for? (e.g. back to school): ").strip()
-    while True:
-        try:
-            max_items = int(input("How many items would you like to be shown?: ").strip())
-            break
-        except ValueError:
-            print("Please enter a valid number.")
+    # Used for backend testing
+    # # Get user input
+    # event = input("What event are you shopping for? (e.g. back to school): ").strip()
+    # while True:
+    #     try:
+    #         max_items = int(input("How many items would you like to be shown?: ").strip())
+    #         break
+    #     except ValueError:
+    #         print("Please enter a valid number.")
 
-    # Suggest items
-    for _ in range(max_items):
-        item = recommend_next_item(event)
-        if not item:
-            break
+    # # Suggest items
+    # for _ in range(max_items):
+    #     item = recommend_next_item(event, accepted_items, rejected_items)
+    #     if not item:
+    #         break
 
-        print(f"\nSuggested: {item['item']} - {item['reason']} ({item['price']})")
-        # print(f"Link: {item['link']}")
-        user_input = input("Do you want this item? (yes/no): ").strip().lower()
+    #     print(f"\nSuggested: {item['item']} - {item['reason']} ({item['price']})")
+    #     # print(f"Link: {item['link']}")
+    #     user_input = input("Do you want this item? (yes/no): ").strip().lower()
 
-        if user_input == "yes":
-            accepted_items.append(item)
-        else:
-            rejected_items.append(item["item"])
+    #     if user_input == "yes":
+    #         accepted_items.append(item)
+    #     else:
+    #         rejected_items.append(item["item"])
 
-    # Final list
-    print("\nFinal Shopping List:")
-    for item in accepted_items:
-        print(f"- {item['item']}: {item['reason']} ({item['price']})")
-        # print(f"  {item['link']}")
+    # # Final list
+    # print("\nFinal Shopping List:")
+    # for item in accepted_items:
+    #     print(f"- {item['item']}: {item['reason']} ({item['price']})")
+    #     # print(f"  {item['link']}")
 
     # Reset
     accepted_items.clear()
