@@ -186,6 +186,25 @@ def get_response():
     return jsonify({"response": bot_response})
 
 
+@app.route("/shopping-list", methods=["GET"])
+def shopping_list_page():
+    return render_template("shopping_list.html")
+
+@app.route("/get_shopping_list_item", methods=["POST"])
+def get_shopping_list_item():
+    data = request.json
+    event = data.get("event")
+    rejected = data.get("rejected", [])
+    accepted = data.get("accepted", [])
+    try:
+        # You may need to refactor shopping_list.py to expose recommend_next_item for import
+        from shopping_list import recommend_next_item
+        item = recommend_next_item(event, accepted, rejected)
+        return jsonify(item)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == "__main__":
     if not os.getenv("OPENAI_API_KEY"):
         print("Error: OPENAI_API_KEY not found. Please set it in .env.")
