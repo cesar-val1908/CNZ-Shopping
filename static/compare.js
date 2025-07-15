@@ -54,8 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
     compareBtn.addEventListener("click", async () => {
 
         const inputs = inputsWrapper.querySelectorAll('input[type="text"]');
+        console.log("Inputs:", inputs);
         const values = Array.from(inputs).map(input => input.value);
-
+        console.log("Values:", values);
+        console.log(JSON.stringify(values));
         console.log("Values to compare:", values.toString());
 
         let frameIndex = 0;
@@ -67,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 70);
 
         try {
-            const response = await fetch("/compare", {
+            const response = await fetch("/compare-items", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
