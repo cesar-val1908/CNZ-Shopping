@@ -32,17 +32,17 @@ body {
 
 .chat-container {
   padding-top: 3%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   background-color: #F3F6F7;
   border: 1px solid #bfc8cb;
   border-radius: 20px;
   width: 98%;
   height: 91%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
-  position: relative;
-  /* margin-top: 70px; */
+  /*   overflow: hidden; */
+  /*   position: relative; */
 }
 
 .navbar {
@@ -113,34 +113,74 @@ body {
 
 .chat-messages {
   flex-grow: 1;
-  padding: 20px;
+  /*! padding: 20px; */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 15px;
   background-color: #F3F6F7;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
-.chat-message {
-  padding: 10px 15px;
-  max-width: 60%;
-  word-wrap: break-word;
-  border-radius: 15px;
+.question-container {
+  width: 60%;
+  text-align: center;
 }
 
-.user-message {
-  align-self: flex-end;
-  background-color: #fce2d4;
-  color: #333;
-  border-radius: 20px 20px 5px 20px;
+.mcq-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-.bot-message {
-  align-self: flex-start;
-  background-color: #e4e4e4;
-  color: #333;
-  border-radius: 20px 20px 20px 5px;
+.mcq-option {
+  display: block;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
 }
+
+.mcq-option:hover {
+  background-color: #f0f0f0;
+}
+
+.mcq-option input[type="radio"] {
+  display: none;
+}
+
+.mcq-option input[type="radio"]:checked+span {
+  font-weight: bold;
+  color: #2a8c82;
+}
+
+.mcq-next-btn,
+.slider-next-btn {
+  padding: 10px 20px;
+  border: none;
+  background-color: #2a8c82;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.recommendations-wrapper {
+  width: 100%;
+  text-align: center;
+}
+
+.recommendations-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 
 .chat-input-area {
   display: flex;

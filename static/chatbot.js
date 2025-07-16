@@ -1,20 +1,18 @@
 const spinnerFrames = [
-  "⣼",
-  "⣹",
-  "⢻",
-  "⠿",
-  "⡟",
-  "⣏",
-  "⣧",
-  "⣶"
+  "⣼", "⣹", "⢻", "⠿", "⡟", "⣏", "⣧", "⣶"
 ];
 
 function fetchResponse(userMessage) {
-  const botMessageElement = appendMessage("bot", "");
+  const chatMessages = document.getElementById("chat-messages");
   let frameIndex = 0;
+  chatMessages.innerHTML = `<div class="spinner-container" style="font-size: 3em;">${spinnerFrames[frameIndex]}</div>`;
+  const spinnerElement = chatMessages.querySelector('.spinner-container');
+
   const spinnerInterval = setInterval(() => {
-    botMessageElement.innerHTML = `<p>${spinnerFrames[frameIndex]}</p>`;
     frameIndex = (frameIndex + 1) % spinnerFrames.length;
+    if (spinnerElement) {
+      spinnerElement.textContent = spinnerFrames[frameIndex];
+    }
   }, 70);
 
   fetch("/get_response", {
@@ -25,17 +23,16 @@ function fetchResponse(userMessage) {
     .then((response) => response.json())
     .then((data) => {
       clearInterval(spinnerInterval);
-      botMessageElement.remove();
       try {
         const botResponse = JSON.parse(data.response);
         handleBotResponse(botResponse, data.response);
       } catch (e) {
-        appendMessage("bot", data.response);
+        chatMessages.innerHTML = `<div class="question-container"><p>${data.response}</p></div>`;
       }
     })
     .catch((error) => {
       clearInterval(spinnerInterval);
-      botMessageElement.innerHTML = `<p>Sorry, something went wrong.</p>`;
+      chatMessages.innerHTML = `<div class="question-container"><p>Sorry, something went wrong.</p></div>`;
       console.error("Error:", error);
     });
 }
@@ -46,7 +43,6 @@ function getBotResponse(event) {
   const userMessage = userInputField.value.trim();
 
   if (userMessage) {
-    appendMessage("user", userMessage);
     userInputField.value = "";
     fetchResponse(userMessage);
   }
@@ -62,67 +58,48 @@ function handleBotResponse(botResponse, rawResponse) {
   } else if (botResponse.type === 'recommendations_list') {
     displayRecommendations(botResponse);
   } else {
-    appendMessage("bot", rawResponse);
+    const chatMessages = document.getElementById("chat-messages");
+    chatMessages.innerHTML = `<div class="question-container"><p>${rawResponse}</p></div>`;
   }
-}
-
-function appendMessage(sender, text) {
-  const chatMessages = document.getElementById("chat-messages");
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("chat-message", `${sender}-message`);
-  messageElement.innerHTML = `<p>${text}</p>`;
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return messageElement;
 }
 
 function displayMultipleChoiceQuestion(questionData) {
   const chatMessages = document.getElementById("chat-messages");
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("chat-message", "bot-message");
   const radioName = `answer_${Date.now()}`;
 
-  let htmlContent = `<p><strong>Question:</strong> ${questionData.question}</p>`;
-  htmlContent += `<p><strong>Reasoning:</strong> ${questionData.reasoning}</p>`;
+  let htmlContent = `<div class="question-container">`;
+  htmlContent += `<h2>${questionData.question}</h2>`;
+  htmlContent += `<p>${questionData.reasoning}</p>`;
   if (questionData.options && questionData.options.length > 0) {
-    htmlContent += `<form class="mcq-form"><p><strong>Options:</strong></p>`;
+    htmlContent += `<form class="mcq-form">`;
     questionData.options.forEach((option, idx) => {
       htmlContent += `
-        <label>
+        <label class="mcq-option">
           <input type="radio" name="${radioName}" value="${option}" ${idx === 0 ? "checked" : ""}>
-          ${option}
-        </label><br>
+          <span>${option}</span>
+        </label>
       `;
     });
     htmlContent += `<button type="button" class="mcq-next-btn">Next</button></form>`;
   }
-  messageElement.innerHTML = htmlContent;
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  htmlContent += `</div>`;
+  chatMessages.innerHTML = htmlContent;
 
-  const form = messageElement.querySelector('.mcq-form');
-  const nextBtn = messageElement.querySelector('.mcq-next-btn');
+  const form = chatMessages.querySelector('.mcq-form');
+  const nextBtn = chatMessages.querySelector('.mcq-next-btn');
   nextBtn.addEventListener('click', function () {
     const selected = form.querySelector(`input[name="${radioName}"]:checked`);
     if (selected) {
-      appendMessage("user", selected.value);
       fetchResponse(selected.value);
-
-      // Disable form after submission so user cant send more message while the ai computes
-      nextBtn.disabled = true;
-      const radios = form.querySelectorAll('input[type="radio"]');
-      radios.forEach(radio => radio.disabled = true);
     }
   });
 }
 
-//TODO : Add min-max range to slider
 function displaySliderQuestion(questionData) {
   const chatMessages = document.getElementById("chat-messages");
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("chat-message", "bot-message");
-  let htmlContent = `<p><strong>Question:</strong> ${questionData.question}</p>`;
-  htmlContent += `<p><strong>Reasoning:</strong> ${questionData.reasoning}</p>`;
+  let htmlContent = `<div class="question-container">`;
+  htmlContent += `<h2>${questionData.question}</h2>`;
+  htmlContent += `<p>${questionData.reasoning}</p>`;
 
   let min = questionData.min, max = questionData.max;
   htmlContent += `
@@ -134,58 +111,54 @@ function displaySliderQuestion(questionData) {
       <button type="button" class="slider-next-btn">Next</button>
     </form>
   `;
+  htmlContent += `</div>`;
+  chatMessages.innerHTML = htmlContent;
 
-  messageElement.innerHTML = htmlContent;
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-
-  const form = messageElement.querySelector('.slider-form');
+  const form = chatMessages.querySelector('.slider-form');
   const slider = form.querySelector('.slider-input');
-  const sliderRange = form.querySelector('.slider-value');
+  const sliderValue = form.querySelector('.slider-value');
   const nextBtn = form.querySelector('.slider-next-btn');
 
   slider.addEventListener('input', function () {
-    sliderRange.textContent = slider.value;
+    sliderValue.textContent = slider.value;
   });
   nextBtn.addEventListener('click', function () {
-    appendMessage("user", slider.value);
     fetchResponse(slider.value);
-
-    nextBtn.disabled = true;
-    slider.disabled = true;
   });
 }
 
 function displayOpenEndedQuestion(questionData) {
-  const chatMessages = document.getElementById("chat-messages");
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("chat-message", "bot-message");
-  let htmlContent = `<p><strong>Question:</strong> ${questionData.question}</p>`;
-  htmlContent += `<p><strong>Reasoning:</strong> ${questionData.reasoning}</p>`;
-  messageElement.innerHTML = htmlContent;
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+    const chatMessages = document.getElementById("chat-messages");
+    let htmlContent = `<div class="question-container">`;
+    htmlContent += `<h2>${questionData.question}</h2>`;
+    htmlContent += `<p>${questionData.reasoning}</p>`;
+    htmlContent += `</div>`;
+    chatMessages.innerHTML = htmlContent;
 }
 
-//TODO: Implement recommendations display
+
 function displayRecommendations(recommendationsData) {
   const chatMessages = document.getElementById("chat-messages");
-  const messageElement = document.createElement("div");
-  messageElement.classList.add("chat-message", "bot-message");
-  let htmlContent = "<p><strong>Here are some recommendations:</strong></p>";
+  let htmlContent = `<div class="recommendations-wrapper">`;
+  htmlContent += "<h2>Here are your recommendations:</h2>";
+  htmlContent += '<div class="recommendations-container">';
 
-  recommendationsData.recommendations.forEach((rec, index) => {
-    htmlContent += `<div class="recommendation-item">`;
-    htmlContent += `<p><strong>Recommendation ${index + 1}:</strong> ${rec.text}</p>`;
-    htmlContent += `<p><strong>Specs:</strong> ${rec.specs}</p>`;
-    htmlContent += `<p><strong>Price:</strong> ${rec.price.replace('Price: ', '')}</p>`;
-    htmlContent += `<p><strong>Ratings:</strong> ${rec.ratings.replace('Ratings: ', '')}</p>`;
-    htmlContent += `</div>`;
+  recommendationsData.recommendations.forEach((rec) => {
+    htmlContent += `
+      <div class="suggested-item">
+        <img src="https://placehold.co/400x300" class="item-image">
+        <div class="item-details">
+            <p class="item-name">${rec.text}</p>
+            <p class="item-price">${rec.price.replace('Price: ', '')}</p>
+        </div>
+        <p class="item-reason"><strong>Specs:</strong> ${rec.specs}</p>
+        <p class="item-reason"><strong>Ratings:</strong> ${rec.ratings.replace('Ratings: ', '')}</p>
+      </div>
+    `;
   });
 
-  messageElement.innerHTML = htmlContent;
-  chatMessages.appendChild(messageElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  htmlContent += '</div></div>';
+  chatMessages.innerHTML = htmlContent;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
