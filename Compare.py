@@ -17,7 +17,7 @@ client = OpenAI(
 )
 
 def get_comparison(items):
-    items_str = ", ".join(items)
+    items_str = items
     with open('prompts/compare.txt', 'r', encoding='utf-8') as file:
         prompt = file.read()
 

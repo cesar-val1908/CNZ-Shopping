@@ -47,7 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         resultsDiv.innerHTML = `
             <h3>Suggested Item :</h3>
-            <p><strong>${data.item}</strong>: ${data.reason} (${data.price})</p>
+            <div class="suggested-item">
+                <img src="https://placehold.co/400" class="item-image">
+                <div class="item-details">
+                    <p class="item-name">${data.item}</p>
+                    <p class="item-price">Price: ${data.price}</p>
+                </div>
+                <p class="item-reason">${data.reason}</p>
+            </div>
             <button id="accept-btn">Accept</button>
             <button id="reject-btn">Reject</button>
         `;

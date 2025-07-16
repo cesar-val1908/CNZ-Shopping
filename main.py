@@ -158,7 +158,7 @@ def compare_page():
     return render_template("compare.html")
 
 
-@app.route("/compare", methods=["POST"])
+@app.route("/compare-items", methods=["POST"])
 def compare_items():
     data = request.json
     items = data.get("items", [])
