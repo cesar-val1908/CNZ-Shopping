@@ -1,31 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
     const startBtn = document.getElementById("start-btn");
     const eventInput = document.getElementById("event-input");
-    const resultsDiv = document.getElementById("shopping-list-results");
-    const finalShoppingListDiv = document.getElementById("final-shopping-list");
+    const todoTitle = document.getElementById("todo-title");
+    const todoItems = document.getElementById("todo-items");
+    const addItemBtn = document.getElementById("add-item-btn");
 
+    let currentEvent = "";
     let accepted = [];
     let rejected = [];
-    let currentEvent = "";
-    let suggestionCount = 0;
-    const maxSuggestions = 5;
 
-    startBtn.addEventListener("click", async () => {
+    startBtn.addEventListener("click", () => {
         currentEvent = eventInput.value.trim();
+        
+        todoTitle.textContent = currentEvent;
+        eventInput.style.display = "none";
+        startBtn.style.display = "none";
+        todoTitle.style.display = "block";
+        addItemBtn.style.display = "block";
+        todoItems.innerHTML = '';
         accepted = [];
         rejected = [];
-        suggestionCount = 0;
-        finalShoppingListDiv.style.display = "none";
-        await getNextItem();
+        getNextItem();
+        
     });
 
-    async function getNextItem() {
-        if (suggestionCount >= maxSuggestions) {
-            displayFinalList();
-            return;
-        }
+    addItemBtn.addEventListener("click", getNextItem);
 
-        resultsDiv.innerHTML = "Loading...";
+    async function getNextItem() {
+        addItemBtn.textContent = "Loading...";
+        addItemBtn.disabled = true;
+
         const response = await fetch("/get_shopping_list_item", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -36,48 +40,52 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         });
 
-        suggestionCount++;
         const data = await response.json();
 
+        addItemBtn.textContent = "+ Generate another...";
+        addItemBtn.disabled = false;
+
         if (data.error || !data.item) {
-            resultsDiv.innerHTML = `<p>Error: ${data.error || "No more items."}</p>`;
-            displayFinalList();
+            addItemBtn.textContent = "No more items to suggest.";
+            addItemBtn.disabled = true;
             return;
         }
 
-        resultsDiv.innerHTML = `
-            <h3>Suggested Item :</h3>
-            <div class="suggested-item">
-                <img src="https://placehold.co/400" class="item-image">
-                <div class="item-details">
-                    <p class="item-name">${data.item}</p>
-                    <p class="item-price">Price: ${data.price}</p>
-                </div>
-                <p class="item-reason">${data.reason}</p>
-            </div>
-            <button id="accept-btn">Accept</button>
-            <button id="reject-btn">Reject</button>
-        `;
-
-        document.getElementById("accept-btn").onclick = () => {
-            accepted.push(data);
-            getNextItem();
-        };
-
-        document.getElementById("reject-btn").onclick = () => {
-            rejected.push(data.item);
-            getNextItem();
-        };
+        accepted.push(data);
+        renderTodoList();
     }
 
-    function displayFinalList() {
-        resultsDiv.innerHTML = "";
-        finalShoppingListDiv.style.display = "block";
-        let listHtml = "<h2>Final Shopping List</h2><ul>";
-        accepted.forEach(item => {
-            listHtml += `<li><strong>${item.item}</strong>: ${item.reason} (${item.price})</li>`;
+    function renderTodoList() {
+        todoItems.innerHTML = "";
+        accepted.forEach((item, index) => {
+            const li = document.createElement("li");
+            li.className = "todo-item";
+            if (item.completed) {
+                li.classList.add("completed");
+            }
+
+            li.innerHTML = `
+                <input type="checkbox" ${item.completed ? "checked" : ""}>
+                <div class="item-text">
+                    <span class="item-name">${item.item}</span>
+                    <span class="item-reason">- ${item.reason}</span>
+                </div>
+                <span class="item-price">${item.price}</span>
+                <button class="delete-btn">&times;</button>
+            `;
+
+            li.querySelector("input[type='checkbox']").addEventListener("change", () => {
+                accepted[index].completed = !accepted[index].completed;
+                renderTodoList();
+            });
+
+            li.querySelector(".delete-btn").addEventListener("click", () => {
+                rejected.push(accepted[index].item);
+                accepted.splice(index, 1);
+                renderTodoList();
+            });
+
+            todoItems.appendChild(li);
         });
-        listHtml += "</ul>";
-        finalShoppingListDiv.innerHTML = listHtml;
     }
 });
