@@ -146,6 +146,18 @@ def ai_bot_response(user_message, conversation_history):
                     "recommendations": recommendations
                 })
 
+    response_text = response.output_text
+    if response_text and response_text.strip().startswith('{'):
+        try:
+            # In case the model returns multiple JSON objects as a string,
+            # we parse only the first one.
+            decoder = json.JSONDecoder()
+            obj, _ = decoder.raw_decode(response_text)
+            return json.dumps(obj)
+        except json.JSONDecodeError:
+            # Not a valid JSON, fall through to return original text
+            pass
+
     return response.output_text
 
 

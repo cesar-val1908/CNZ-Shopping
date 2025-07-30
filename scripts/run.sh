@@ -12,6 +12,11 @@ fi
 
 python -m pip install -r requirements.txt
 
-export $(grep -v '^#' .env | xargs)
+# Source environment variables from .env file
+if [ -f .env ]; then
+    set -o allexport
+    source .env
+    set +o allexport
+fi
 
 waitress-serve --listen=0.0.0.0:$PORT main:app
