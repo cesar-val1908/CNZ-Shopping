@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Shopping List</title>
+    <title>Shopping List Assistant</title>
     <link rel="stylesheet" href="/static/styles/style.css" />
 </head>
 
@@ -40,20 +40,23 @@
         </div>
     </div>
 
-    <div class="todo-list-container">
-        <h1 class="header">Generate todo lists for items for any situation</h1>
-    <h3 class="description">Explain the event that you are planning for, then generate items that you will need.</h3>
-        <div class="todo-header">
-            <input id="event-input" type="text" placeholder="What are you shopping for? e.g. Back to School" />
-            <button id="start-btn">Start</button>
+    <div class="shopping-list-container">
+        <h1 class="header">Get recommendations for items for any situation</h1>
+        <h3 class="description">Explain the event that you are planning for, then identify requirements
+            and constraints.</h3>
+
+        <div class="shopping-list-input">
+            <input id="event-input" type="text" placeholder="Enter a event" />
+            <button id="start-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                    fill="#5e6061">
+                    <path
+                        d="M120-160v-640l760 320-760 320Zm80-120 474-200-474-200v140l240 60-240 60v140Zm0 0v-400 400Z" />
+                </svg>
+            </button>
         </div>
-        <h1 id="todo-title" class="header"></h1>
-        <ul id="todo-items" class="todo-items">
-            <!-- Items will be added here -->
-        </ul>
-        <div class="add-item-container">
-            <button id="add-item-btn">+ Generate another...</button>
-        </div>
+        <div id="shopping-list-results"></div>
+        <div id="final-shopping-list" style="display: none;"></div>
     </div>
     <script src="/static/shopping_list.js"></script>
 </body>
