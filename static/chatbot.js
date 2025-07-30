@@ -146,7 +146,7 @@ function displayRecommendations(recommendationsData) {
   recommendationsData.recommendations.forEach((rec) => {
     htmlContent += `
       <div class="suggested-item">
-        <img src="https://placehold.co/400x300" class="item-image">
+        <img src="${rec.image || 'https://placehold.co/400x300'}" class="item-image" alt="${rec.text}">
         <div class="item-details">
             <p class="item-name">${rec.text}</p>
             <p class="item-price">${rec.price.replace('Price: ', '')}</p>

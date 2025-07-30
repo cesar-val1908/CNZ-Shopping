@@ -56,24 +56,27 @@ def get_real_product_data(query):
         products = results.get("shopping_results", [])
 
         prices = []
-        for product in products[:5]:
+        image_url = None
+
+        for i, product in enumerate(products[:5]):
             price_str = product.get("price", "")
             match = re.search(r"\$([\d,]+\.\d{2})", price_str)
             if match:
                 prices.append(float(match.group(1).replace(",", "")))
+                if not image_url:
+                    image_url = product.get("thumbnail")
 
         if prices:
-            low = min(prices)
-            high = max(prices)
-            if low == high:
-                return {"price_low": low, "price_high": high}
-            else:
-                return {"price_low": low, "price_high": high}
+            return {
+                "price_low": min(prices),
+                "price_high": max(prices),
+                "image": image_url
+            }
         else:
-            return {"price_low": None, "price_high": None}
+            return {"price_low": None, "price_high": None, "image": image_url}
     except Exception as e:
         print("Error fetching product data:", e)
-        return {"price_low": None, "price_high": None}
+        return {"price_low": None, "price_high": None, "image": None}
 
 def clean_item(raw_item):
     if isinstance(raw_item, dict):
