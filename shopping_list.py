@@ -167,6 +167,28 @@ def recommend_items(event, accepted, rejected, count=1):
         print("Error generating item:", e)
         return []
 
+def recommend_next_item(event, accepted, rejected):
+    items = recommend_items(event, accepted, rejected, count=1)
+    if not items:
+        return {}
+
+    item = items[0]
+    product_info = get_real_product_data(item["item"])
+    item.update(product_info)
+
+    price_low = item.get("price_low")
+    price_high = item.get("price_high")
+
+    if price_low is not None and price_high is not None:
+        if price_low == price_high:
+            item["price"] = f"${price_low:.2f}"
+        else:
+            item["price"] = f"from ${price_low:.2f} - ${price_high:.2f}"
+    else:
+        item["price"] = "(price not available)"
+
+    return item
+
 def print_item(item):
     if item['price_low'] is not None and item['price_high'] is not None:
         if item['price_low'] == item['price_high']:
