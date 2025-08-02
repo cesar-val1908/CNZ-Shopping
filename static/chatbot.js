@@ -145,8 +145,8 @@ function displayRecommendations(recommendationsData) {
 
   recommendationsData.recommendations.forEach((rec) => {
     htmlContent += `
-      <div class="suggested-item">
-        <img src="https://placehold.co/400x300" class="item-image">
+      <div class="suggested-item" style="background: #AAB5B8;background: radial-gradient(circle, rgba(178, 194, 194, 1) 0%, rgba(219, 228, 231, 1) 100%);border: 1px solid #dcdcdc;border-radius: 32px;padding: 15px;margin-bottom: 20px;width: 300px;height: 450px;">
+        <img src="${rec.image || 'https://placehold.co/400x300'}" class="item-image" alt="${rec.text}">
         <div class="item-details">
             <p class="item-name">${rec.text}</p>
             <p class="item-price">${rec.price.replace('Price: ', '')}</p>
