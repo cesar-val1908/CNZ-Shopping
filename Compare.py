@@ -36,7 +36,6 @@ def get_comparison(items):
         tools=tools,
         # max_output_tokens=10000
     )
-
     try:
         result = json.loads(response.output_text)
         return result
