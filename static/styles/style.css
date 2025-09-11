@@ -21,13 +21,15 @@ body {
   font-size: xx-large;
   color: #171D1E;
   font-weight: normal;
+  margin: 0;
 }
 
 .description {
-  margin-top: -10px;
+  margin-top: 0;
   font-size: small;
   color: #3F484B;
   font-weight: normal;
+  margin-bottom: 0;
 }
 
 .chat-container {
@@ -115,16 +117,17 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 39px;
   background-color: #F3F6F7;
   width: 100%;
-  align-items: center;
+  align-items: start;
   justify-content: center;
+  margin-left: 15vw;
 }
 
 .question-container {
   width: 60%;
-  text-align: center;
+  text-align: left;
 }
 
 .mcq-form {
@@ -135,11 +138,41 @@ body {
 }
 
 .mcq-option {
-  display: block;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+background-color: transparent;
+  background-image: linear-gradient(#F3F6F6, #E3E9EB);
+  border: 1px solid #D0D0D0;
+  border-radius: 23px;
+  box-shadow: rgba(37, 44, 97, .15) 0 4px 11px 0, rgba(93, 100, 148, .2) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #484c7a;
   cursor: pointer;
+  display: flex;
+  font-family: Hind, system-ui, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  /*! font-weight: 600; */
+  margin: 4px;
+  padding: 16px 24px;
+  text-align: left;
+  text-decoration: inherit;
+  text-wrap: nowrap;
+  transition: all .2s ease-out;
+  transition-behavior: normal;
+  white-space-collapse: collapse;
+  line-height: 1.15;
+height: 80px;
+justify-content: left;
+align-items: center;
+text-align: left;
+}
+
+.mcq-option:hover{
+    box-shadow: rgba(37, 44, 97, .15) 0 8px 22px 0, rgba(93, 100, 148, .2) 0 4px 6px 0;
+    background: #DEE4E6;
+
+}
+
+.mcq-option-text {
+  font-size: 1.2em;
+  padding-left: 20px;
 }
 
 .mcq-option:hover {
@@ -147,7 +180,18 @@ body {
 }
 
 .mcq-option input[type="radio"] {
-  display: none;
+  display: block;
+  width: 30px;
+  height: 30px;
+  accent-color: #A0EFFF;
+  margin-right: 12px;
+  box-shadow: 2px 2px 7.5px 1px #9AAFB5, -2px -2px 7.5px 3px #fff ,inset 0px 0px 13px #B3B3B3;
+  outline: none;
+  appearance: none;
+  vertical-align: top;
+  border: 1px solid #CDDBE0;
+  border-radius: 50px;
+  background: #fff no-repeat center center;
 }
 
 .mcq-option input[type="radio"]:checked+span {
@@ -155,6 +199,11 @@ body {
   color: #2a8c82;
 }
 
+.mcq-option input[type="radio"]:checked{
+
+    box-shadow: 2px 2px 7.5px 1px #9AAFB5, -2px -2px 7.5px 3px #fff ,inset 0px 0px 13px #A0EFFF;
+
+}
 .mcq-next-btn,
 .slider-next-btn {
   padding: 10px 20px;
@@ -182,26 +231,34 @@ body {
 
 .chat-input-area {
   display: flex;
-  align-items: center;
-  margin: 20px;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
   padding: 5px;
   border: 1px solid #dcdcdc;
-  background-color: #f7f7f7;
+  background-color: #E3E9EB;
   border-radius: 30px;
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  max-height: 160px;
 }
 
 .input-wrapper {
   position: relative;
   flex-grow: 1;
+  display: flex;
 }
 
 #user-input {
   width: 100%;
-  padding: 10px 15px 10px 45px;
+  padding: 20px;
   border: none;
   font-size: 1em;
   background-color: transparent;
   outline: none;
+  resize: none;
+  flex-grow: 1;
 }
 
 .search-icon {
@@ -214,18 +271,35 @@ body {
 }
 
 .chat-input-area button {
-  background-color: #fce2d4;
+  background-color: transparent;
   color: #333;
-  border: 1px solid #dcdcdc;
+  border: none;
   border-radius: 25px;
-  padding: 10px 20px;
+  padding: 19px;
   cursor: pointer;
   font-size: 1em;
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-left: 50px;
+  justify-content: center;
+  /*! margin-left: 49px; */
   z-index: 9999;
+  height: 20px;
+  width: 48px;
+  left: 90%;
+  position: relative;
+}
+
+.question-title{
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 4px;
+    color: #171D1E;
+}
+.question-reasoning{
+    font-size: 1em;
+    color: #3F484B;
+    margin-top: 0;
+    margin-bottom: 20px;
 }
 
 .chat-input-area button:hover {
@@ -400,4 +474,14 @@ body {
 .todo-item.completed .item-text {
     text-decoration: line-through;
     color: #aaa;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  height: 100%;
+  width: 100%;
+  gap: 20px; 
 }

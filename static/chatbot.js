@@ -4,6 +4,13 @@ const spinnerFrames = [
 
 function fetchResponse(userMessage) {
   const chatMessages = document.getElementById("chat-messages");
+  const mainContent = document.getElementById("main-content");
+  if (mainContent) mainContent.style.display = "none";
+  if (chatMessages) {
+    chatMessages.style.display = "flex";
+    chatMessages.style.justifyContent = "center";
+    chatMessages.style.alignItems = "center";
+  }
   let frameIndex = 0;
   chatMessages.innerHTML = `<div class="spinner-container" style="font-size: 3em;">${spinnerFrames[frameIndex]}</div>`;
   const spinnerElement = chatMessages.querySelector('.spinner-container');
@@ -68,21 +75,22 @@ function displayMultipleChoiceQuestion(questionData) {
   const radioName = `answer_${Date.now()}`;
 
   let htmlContent = `<div class="question-container">`;
-  htmlContent += `<h2>${questionData.question}</h2>`;
-  htmlContent += `<p>${questionData.reasoning}</p>`;
-  if (questionData.options && questionData.options.length > 0) {
+  htmlContent += `<h2 class="question-title">${questionData.question}</h2>`;
+  htmlContent += `<p class="question-reasoning">${questionData.reasoning}</p>`;
+  if (questionData.options& & questionData.options.length > 0) {
     htmlContent += `<form class="mcq-form">`;
     questionData.options.forEach((option, idx) => {
       htmlContent += `
-        <label class="mcq-option">
-          <input type="radio" name="${radioName}" value="${option}" ${idx === 0 ? "checked" : ""}>
-          <span>${option}</span>
-        </label>
-      `;
+    <label class="mcq-option" role="button">
+      <input type="radio" name="${radioName}" value="${option}" ${idx === 0 ? "checked" : ""}>
+      <span class="mcq-option-text">${option}</span>
+    </label>
+  `;
     });
-    htmlContent += `<button type="button" class="mcq-next-btn">Next</button></form>`;
+    htmlContent += `</form></div>`;
+    ;
   }
-  htmlContent += `</div>`;
+  htmlContent += `<button type="button" class="mcq-next-btn">Next</button>`;
   chatMessages.innerHTML = htmlContent;
 
   const form = chatMessages.querySelector('.mcq-form');
@@ -128,6 +136,16 @@ function displaySliderQuestion(questionData) {
 }
 
 function displayOpenEndedQuestion(questionData) {
+    // show the user-input field again
+    const mainContent = document.getElementById("main-content");
+    if (mainContent) mainContent.style.display = "flex";
+    const header = document.getElementById("header");
+    header.style.display = "none";
+    const description = document.getElementById("description");
+    description.style.display = "none";
+
+    const userInputField = document.getElementById("input-chat-area");
+    if (userInputField) userInputField.style.display = "flex";
     const chatMessages = document.getElementById("chat-messages");
     let htmlContent = `<div class="question-container">`;
     htmlContent += `<h2>${questionData.question}</h2>`;
