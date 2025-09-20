@@ -4,8 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <title>CNZ Compare</title>
   <link rel="stylesheet" href="/static/styles/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
@@ -44,14 +46,25 @@
     <h3 class="description">To start, search two or more items and compare them</h3>
     <div class="compare-inputs">
       <div class="inputs-wrapper">
-        <input class="item-input" type="text" placeholder="Enter item name" />
-        <input class="item-input" type="text" placeholder="Enter item name" />
+        <div class="input-group">
+          <input class="item-input" type="text" placeholder="Enter First Product" />
+          <button id="compare-btn" class="icon-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="input-group">
+          <input class="item-input" type="text" placeholder="Enter Second Product" />
+        </div>
+        <div class="input-group">
+          <input class="item-input" type="text" placeholder="Add Another..." />
+          <button id="add-btn" class="icon-btn"><i class="fas fa-plus"></i></button>
+        </div>
       </div>
-      <button id="add-btn">+</button>
-      <button id="compare-btn">Compare</button>
     </div>
     <div id="comparison-results" class="comparison-results">
       <!-- Results will be displayed here -->
+    </div>
+
+    <div id="sidebar-results" class="sidebar-results">
+      <!-- Distinctions and Recommendations will be displayed here -->
     </div>
   </div>
 

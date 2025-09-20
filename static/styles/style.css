@@ -29,7 +29,7 @@ body {
   font-size: small;
   color: #3F484B;
   font-weight: normal;
-  margin-bottom: 0;
+  margin-bottom: 50px;
 }
 
 .chat-container {
@@ -332,18 +332,60 @@ text-align: left;
 
 /*---COMPARE TAB --- */
 .compare-container {
-  padding-top: 3%;
+  display: flex;
+  flex-direction: column;
+  background-color: #F3F6F7;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.compare-inputs {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  background-color: #F3F6F7;
-  border: 1px solid #bfc8cb;
-  border-radius: 20px;
-  width: 98%;
-  height: 91%;
-  overflow: hidden;
-  position: relative;
+  gap: 15px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.inputs-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.item-input {
+  flex-grow: 1;
+  padding: 15px 20px;
+  border-radius: 30px;
+  border: 1px solid #dcdcdc;
+  background-color: #f0f0f0;
+  font-size: 1em;
+  outline: none;
+}
+
+.icon-btn {
+  background-color: #f0f0f0;
+  border: 1px solid #dcdcdc;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #555;
 }
 
 #comparison-items-wrapper {
@@ -356,12 +398,106 @@ text-align: left;
 .comparison-item {
   flex: 1 1 300px;
   border: 1px solid #ccc;
-  padding: 16px;
+  padding: 36px;
   background: #fafafa;
   border-radius: 8px;
   box-sizing: border-box;
   min-width: 250px;
-  max-width: 350px;
+  max-width: 450px;
+}
+
+.sidebar-results {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background-color: #f3f6f7;
+  border-left: 1px solid #bfc8cb;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  z-index: 999;
+  display: none; /* Hidden by default */
+}
+
+.sidebar-results h3 {
+  color: #171D1E;
+  margin-top: 0;
+}
+
+.sidebar-results h4 {
+  color: #3F484B;
+  margin-bottom: 10px;
+}
+
+.sidebar-results p {
+  color: #555;
+  line-height: 1.5;
+}
+
+.spec-group-name {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  text-align: left;
+  color: #333;
+}
+
+.specs-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  color: #444;
+}
+
+.spec-item.good-stat {
+  background-color: #aaffaa; /* Light green */
+  border: 1px solid #aaffaa;
+  color: #05420f;
+}
+
+.spec-item.bad-stat {
+  background-color: #ffaaaa; /* Light red */
+  border: 1px solid #ffaaaa;
+  color: #8c0303;
+}
+
+.spec-name {
+  font-weight: bold;
+  /*! color: #555; */
+}
+
+.spec-value {
+  /*! color: #333; */
+}
+
+.spec-indicator {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+}
+
+.good-stat .spec-indicator {
+  background-color: #aaffaa; /* Green */
+  color: #006600;
+}
+
+.bad-stat .spec-indicator {
+  background-color: #ffaaaa; /* Red */
+  color: #cc0000;
 }
 
 /*---TODO LIST --- */
