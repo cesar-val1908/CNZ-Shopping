@@ -11,7 +11,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-font-family: "JetBrains Mono", monospace;
+font-family: "Instrument Serif", serif;
 color: #616570f5;
 /*! padding: -299px; */
 }
@@ -135,6 +135,7 @@ color: #616570f5;
     transition: max-width 0.4s ease-in-out, opacity 0.2s ease-in-out;
     white-space: nowrap;
     overflow: hidden;
+    font-family: "JetBrains Mono", monospace;
 }
 
 .navbar:hover .nav-btn-text {
@@ -160,7 +161,7 @@ color: #616570f5;
   gap: 39px;
   background-color: #F3F6F7;
   width: 100%;
-  align-items: start;
+  align-items: center;
   justify-content: center;
 }
 
@@ -170,7 +171,7 @@ color: #616570f5;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-left: 15vw;
+  /*! margin-left: 15vw; */
   /*! padding-right: 100px; */
   /*! align-items: center; */
   /*! align-self: center; */
@@ -193,14 +194,14 @@ background-color: transparent;
   color: #484c7a;
   cursor: pointer;
   display: flex;
-  font-family: Hind, system-ui, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "JetBrains Mono", monospace;
   /*! font-weight: 600; */
   margin: 4px;
   padding: 16px 24px;
   text-align: left;
   text-decoration: inherit;
   text-wrap: nowrap;
-  transition: all .2s ease-out;
+  transition: .6s ease-out;
   transition-behavior: normal;
   white-space-collapse: collapse;
   line-height: 1.15;
@@ -212,7 +213,7 @@ text-align: left;
 
 .mcq-option:hover{
     box-shadow: rgba(37, 44, 97, .15) 0 8px 22px 0, rgba(93, 100, 148, .2) 0 4px 6px 0;
-    background: #DEE4E6;
+    background: linear-gradient(#e3e9eb, #f3f6f6);
 
 }
 
@@ -346,16 +347,17 @@ text-align: left;
 
 .question-title{
     font-size: 3em;
-    font-weight: bold;
+    font-weight: normal;
     margin-bottom: 4px;
     color: #171D1E;
 }
 .question-reasoning{
-    font-size: 1.5em;
+    font-size: 1em;
     color: #3F484B9C;
     margin-top: 0;
     margin-bottom: 20px;
     font-style: italic;
+    font-family: "JetBrains Mono", monospace;
 }
 
 .chat-input-area button:hover {
@@ -588,16 +590,17 @@ text-align: left;
     margin: 0;
     padding: 6px 6px 6px 20px;
     border: 1px solid #dcdcdc;
-    background-color: #E3E9EB;
+    background-color: #f0f0f0;
     border-radius: 40px 10px 10px 40px;
-    width: 100%;
-    max-width: 500px;
+    width: 50vw;
+    /*! max-width: 165px; */
     height: 100%;
     max-height: 30px;
+    font-family: Space Mono;
 }
 
 #start-btn {
-  background-color: #e3e9eb;
+  background-color: #f0f0f0;
   border: 1px solid #c7c7ca;
   border-radius: 20% 50% 50% 20%;
   width: 45px;
