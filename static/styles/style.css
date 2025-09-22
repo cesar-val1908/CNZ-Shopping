@@ -1,15 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
 body {
-  font-family: Arial, sans-serif;
+/*   font-family: Arial, sans-serif; */
   background-color: #E3E9EB;
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+font-family: "JetBrains Mono", monospace;
+color: #616570f5;
+/*! padding: -299px; */
 }
 
 .chat-header {
   position: fixed;
+/*   font-family: "Space Mono", monospace; */
   top: 0;
   left: 0;
   width: 100%;
@@ -18,33 +27,36 @@ body {
 }
 
 .header {
-  font-size: xx-large;
+  font-size: xxx-large;
+
+    font-family: "Instrument Serif", serif;
   color: #171D1E;
   font-weight: normal;
   margin: 0;
 }
 
 .description {
-  margin-top: 0;
+  /*! margin-top: -10px; */
   font-size: small;
+    font-family: "Space Mono", monospace;
+
   color: #3F484B;
   font-weight: normal;
   margin-bottom: 50px;
 }
 
 .chat-container {
-  padding-top: 3%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #F3F6F7;
-  border: 1px solid #bfc8cb;
-  border-radius: 20px;
-  width: 98%;
-  height: 91%;
-  /*   overflow: hidden; */
-  /*   position: relative; */
+    background-color: #F3F6F7;
+    border: 1px solid #bfc8cb;
+    border-radius: 20px;
+    width: 98%;
+    height: 97%;
+    padding: 20px;
+  padding-top: 100px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .question-container-questions{
   
@@ -53,19 +65,24 @@ body {
   display: flex;
   justify-content: center;
   background-color: #E3E9EB;
-  border-radius: 0px 0px 25px 25px;
-  /*   border: 10px; */
-  padding: 10px;
-  padding-left: 15vw;
-  padding-right: 15vw;
+  border-radius: 0px 0px 40px 40px;
+  padding: 10px 20px;
   margin: 0 auto;
-  width: fit-content;
   position: relative;
   z-index: 1000;
   border-right: 1px solid #bfc8cb;
   border-bottom: 1px solid #bfc8cb;
   border-left: 1px solid #bfc8cb;
+  transition: .5s cubic-bezier(.79,.14,.15,.86);
+  width: 159px;
+  gap: 10px;
+}
 
+.navbar:hover {
+    /*! padding-left: 15vw; */
+    /*! padding-right: 15vw; */
+    width: 500px;
+    border-radius: 0px 0px 25px 25px;
 }
 
 
@@ -93,15 +110,36 @@ body {
   background-color: transparent;
   border: none;
   border-radius: 20px;
-  padding: 8px 18px;
+  padding: 7px 8px 4px 8px;
   cursor: pointer;
   font-size: 0.9em;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   color: #555;
-  /* margin-top: -25px; */
+  transition: padding 0.4s cubic-bezier(.65,.05,.36,1), gap 0.4s cubic-bezier(.6,.04,.98,.34);
+  overflow: hidden;
+  white-space: nowrap;
+}
 
+.navbar:hover .nav-btn {
+    padding: 8px 18px;
+    gap: 8px;
+}
+
+.nav-btn-text {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 0;
+    opacity: 0;
+    transition: max-width 0.4s ease-in-out, opacity 0.2s ease-in-out;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.navbar:hover .nav-btn-text {
+    max-width: 70px;
+    opacity: 1;
 }
 
 .nav-btn.active {
@@ -110,7 +148,7 @@ body {
 }
 
 .nav-btn .icon {
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 .chat-messages {
@@ -332,14 +370,18 @@ text-align: left;
 
 /*---COMPARE TAB --- */
 .compare-container {
-  display: flex;
-  flex-direction: column;
-  background-color: #F3F6F7;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-  height: 100vh;
+    background-color: #F3F6F7;
+    border: 1px solid #bfc8cb;
+    border-radius: 20px;
+    width: 98%;
+    height: 97%;
+    padding: 20px;
+  /*! padding-top: 100px; */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .compare-inputs {
@@ -348,7 +390,8 @@ text-align: left;
   align-items: center;
   gap: 15px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
+  font-family: "Space Mono", monospace;
 }
 
 .inputs-wrapper {
@@ -370,8 +413,9 @@ text-align: left;
   border-radius: 30px;
   border: 1px solid #dcdcdc;
   background-color: #f0f0f0;
-  font-size: 1em;
+  font-size: 0.75em;
   outline: none;
+  font-family: "Space Mono", monospace;
 }
 
 .icon-btn {
@@ -392,6 +436,7 @@ text-align: left;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: center;
 }
 
 
@@ -404,6 +449,8 @@ text-align: left;
   box-sizing: border-box;
   min-width: 250px;
   max-width: 450px;
+  overflow-y: scroll;
+  max-height: 60vh;
 }
 
 .sidebar-results {
@@ -437,10 +484,10 @@ text-align: left;
 }
 
 .spec-group-name {
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-top: 15px;
-  margin-bottom: 5px;
+  font-size: 1.5em;
+  font-weight: initial;
+  margin-top: 25px;
+  margin-bottom: 10px;
   text-align: left;
   color: #333;
 }
@@ -450,6 +497,8 @@ text-align: left;
   flex-direction: column;
   gap: 5px;
   margin-bottom: 10px;
+  font-family: "Space Mono", monospace;
+  font-size: 0.65em;
 }
 
 .spec-item {
@@ -475,7 +524,7 @@ text-align: left;
 }
 
 .spec-name {
-  font-weight: bold;
+  font-weight: 600;
   /*! color: #555; */
 }
 
@@ -513,6 +562,7 @@ text-align: left;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .todo-header {
@@ -522,26 +572,53 @@ text-align: left;
     margin-bottom: 20px;
 }
 
+.shopping-list-input {
+  display: flex;
+  gap: 10px;
+}
+
 #event-input {
-    width: 50%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    /*! width: 50%; */
+    /*! padding: 10px; */
+    /*! border: 1px solid #ccc; */
+    /*! border-radius: 5px; */
+    /*! display: flex; */
+    /*! flex-direction: column; */
+    /*! justify-content: center; */
+    margin: 0;
+    padding: 6px 6px 6px 20px;
+    border: 1px solid #dcdcdc;
+    background-color: #E3E9EB;
+    border-radius: 40px 10px 10px 40px;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    max-height: 30px;
 }
 
 #start-btn {
-    padding: 10px 20px;
-    border: none;
-    background-color: #2a8c82;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
+  background-color: #e3e9eb;
+  border: 1px solid #c7c7ca;
+  border-radius: 20% 50% 50% 20%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #555;
+  padding-left: 10px;
+  padding-right: 10px
 }
 
 #todo-title {
     align-self: flex-start;
-    margin-left: 10%;
+    margin-left: 5%;
+    font-family: "Instrument Serif", serif;
+    font-size: xxx-large;
+    font-weight: 100;
+    font-style: italic;
 }
 
 .todo-items {
@@ -555,6 +632,9 @@ text-align: left;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
+    background-color: #E5E8EB3B;
+    border-radius: 12px;
+    font-size: 0.8em;
 }
 
 .todo-item input[type="checkbox"] {
@@ -563,6 +643,7 @@ text-align: left;
 
 .item-text {
     flex-grow: 1;
+    padding: 8px;
 }
 
 
@@ -614,9 +695,9 @@ text-align: left;
 }
 
 .item-name {
-    font-size: 1.6rem;
+    /*! font-size: 1em; */
     font-weight: 500;
-    color: #333;
+    color: #41444a;
     margin: 01rem 0 0rem 0;
 }
 
@@ -627,7 +708,7 @@ text-align: left;
 }
 
 .item-price {
-    font-size: 1.1rem;
+    /*! font-size: 1.1rem; */
     font-weight: bold;
     color: #0A7000;
 }
@@ -669,6 +750,7 @@ text-align: left;
     border: none;
     cursor: pointer;
     margin-left: 15px;
+    font-size: 1em;
 }
 
 .add-item-container {
@@ -677,13 +759,16 @@ text-align: left;
 }
 
 #add-item-btn {
-    width: 100%;
+    width: 80%;
     padding: 15px;
     border: 1px dashed #ccc;
     background-color: #fafafa;
     cursor: pointer;
     text-align: left;
     color: #555;
+    font-family: inherit;
+    border-radius: 12px;
+    margin-top: 30px;
 }
 
 .todo-item.completed .item-text {
@@ -786,4 +871,91 @@ text-align: left;
   font-weight: bold;
   font-size: 1.5em;
   color: #171D1E;
+}
+
+
+#todo-items {
+  margin: 0;
+  padding: 0;
+  width: 80%;
+}
+
+/* Custom checkbox for todo list */
+.todo-checkbox-wrapper .todo-checkbox {
+  --bg: #D4D9DE2E;
+  --brdr: #d1d6ee;
+  --brdr-actv: #FFDCC5;
+  --brdr-hovr: #bbc1e1;
+  --dur: calc((var(--size, 2)/2) * 0.6s);
+  display: inline-block;
+  width: calc(var(--size, 1) * 22px);
+  position: relative;
+}
+.todo-checkbox-wrapper .todo-checkbox:after {
+  content: "";
+  width: 100%;
+  padding-top: 100%;
+  display: block;
+}
+.todo-checkbox-wrapper .todo-checkbox > * {
+  position: absolute;
+}
+.todo-checkbox-wrapper .todo-checkbox input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  background-color: var(--bg);
+  border-radius: calc(var(--size, 1) * 4px);
+  border: calc(var(--newBrdr, var(--size, 1)) * 1px) solid;
+  color: var(--newBrdrClr, var(--brdr));
+  outline: none;
+  margin: 0;
+  padding: 0;
+  transition: all calc(var(--dur) / 3) linear;
+}
+.todo-checkbox-wrapper .todo-checkbox input:hover,
+.todo-checkbox-wrapper .todo-checkbox input:checked {
+  --newBrdr: calc(var(--size, 1) * 2);
+}
+.todo-checkbox-wrapper .todo-checkbox input:hover {
+  --newBrdrClr: var(--brdr-hovr);
+}
+.todo-checkbox-wrapper .todo-checkbox input:checked {
+  --newBrdrClr: var(--brdr-actv);
+  transition-delay: calc(var(--dur) /1.3);
+  background-color: #FFDCC5;
+}
+.todo-checkbox-wrapper .todo-checkbox input:checked + svg {
+  --dashArray: 16 93;
+  --dashOffset: 109;
+}
+.todo-checkbox-wrapper .todo-checkbox svg {
+  fill: #FFDCC5;
+  left: 0;
+  pointer-events: none;
+  stroke: #FFDCC5;
+  stroke-dasharray: var(--dashArray, 93);
+  stroke-dashoffset: var(--dashOffset, 94);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+  top: 0;
+  transition: stroke-dasharray var(--dur), stroke-dashoffset var(--dur);
+}
+.todo-checkbox-wrapper .todo-checkbox svg,
+.todo-checkbox-wrapper .todo-checkbox input {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+
+.todo-checkbox-wrapper {
+  margin-bottom: -4px;
+  padding: 10px;
+}
+.item-reason {
+  padding-right: 15px;
+  /*! overflow: hidden; */
 }

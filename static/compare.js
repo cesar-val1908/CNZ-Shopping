@@ -57,6 +57,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 compareInputs.style.display = 'none';
             }
 
+            const header = document.querySelector('.header');
+            if (header) {
+                header.style.display = 'none';
+            }
+
+            const description = document.querySelector('.description');
+            if (description) {
+                description.style.display = 'none';
+            }
+
             if (!data.table) {
                 resultsDiv.innerHTML = `<p>Error: No comparison data returned. Please check your input or try again later.</p>`;
                 return;
