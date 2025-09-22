@@ -18,6 +18,7 @@ create a file called .env inside the project, and add the following code
 
 ```bash
    OPENAI_API_KEY="your-api-key-here" # replace with api key
+   SERPAPI_KEY="your-api-key-here"
    HTTP_PORT=5899  
 ```
 

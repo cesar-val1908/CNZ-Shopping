@@ -19,4 +19,11 @@ if [ -f .env ]; then
     set +o allexport
 fi
 
-waitress-serve --listen=0.0.0.0:$PORT main:app
+if [ "$1" == "dev" ]; then
+    export FLASK_APP=main.py
+    export FLASK_ENV=development
+    export FLASK_DEBUG=1
+    flask run --host=0.0.0.0 --port=${PORT:-5000}
+else
+    waitress-serve --listen=0.0.0.0:${PORT:-5000} main:app
+fi

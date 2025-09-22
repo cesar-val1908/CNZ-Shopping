@@ -4,6 +4,13 @@ const spinnerFrames = [
 
 function fetchResponse(userMessage) {
   const chatMessages = document.getElementById("chat-messages");
+  const mainContent = document.getElementById("main-content");
+  if (mainContent) mainContent.style.display = "none";
+  if (chatMessages) {
+    chatMessages.style.display = "flex";
+    chatMessages.style.justifyContent = "left";
+    chatMessages.style.alignItems = "left";
+  }
   let frameIndex = 0;
   chatMessages.innerHTML = `<div class="spinner-container" style="font-size: 3em;">${spinnerFrames[frameIndex]}</div>`;
   const spinnerElement = chatMessages.querySelector('.spinner-container');
@@ -68,19 +75,21 @@ function displayMultipleChoiceQuestion(questionData) {
   const radioName = `answer_${Date.now()}`;
 
   let htmlContent = `<div class="question-container">`;
-  htmlContent += `<h2>${questionData.question}</h2>`;
-  htmlContent += `<p>${questionData.reasoning}</p>`;
+  htmlContent += `<div class="question-container-questions">`;
+  htmlContent += `<h2 class="question-title">${questionData.question}</h2>`;
+  htmlContent += `<p class="question-reasoning">${questionData.reasoning}</p>`;
   if (questionData.options && questionData.options.length > 0) {
     htmlContent += `<form class="mcq-form">`;
     questionData.options.forEach((option, idx) => {
       htmlContent += `
-        <label class="mcq-option">
-          <input type="radio" name="${radioName}" value="${option}" ${idx === 0 ? "checked" : ""}>
-          <span>${option}</span>
-        </label>
-      `;
+    <label class="mcq-option" role="button">
+      <input type="radio" name="${radioName}" value="${option}" ${idx === 0 ? "checked" : ""}>
+      <span class="mcq-option-text">${option}</span>
+    </label>
+  `;
     });
-    htmlContent += `<button type="button" class="mcq-next-btn">Next</button></form>`;
+    htmlContent += `</form></div><button type="button" class="mcq-next-btn">Next</button>`;
+    ;
   }
   htmlContent += `</div>`;
   chatMessages.innerHTML = htmlContent;
@@ -98,14 +107,14 @@ function displayMultipleChoiceQuestion(questionData) {
 function displaySliderQuestion(questionData) {
   const chatMessages = document.getElementById("chat-messages");
   let htmlContent = `<div class="question-container">`;
-  htmlContent += `<h2>${questionData.question}</h2>`;
-  htmlContent += `<p>${questionData.reasoning}</p>`;
+  htmlContent += `<h2 class="slider-question-header">${questionData.question}</h2>`;
+  htmlContent += `<p class="slider-question-reasoning">${questionData.reasoning}</p>`;
 
   let min = questionData.min, max = questionData.max;
   htmlContent += `
     <form class="slider-form">
       <label>
-        <input type="range" min="${min}" max="${max}" value="${min}" class="slider-input">
+        <input class="slider-input" type="range" min="${min}" max="${max}" value="${min}" class="slider-input">
         <span class="slider-value">${min}</span> / ${max}
       </label>
       <button type="button" class="slider-next-btn">Next</button>
@@ -128,10 +137,22 @@ function displaySliderQuestion(questionData) {
 }
 
 function displayOpenEndedQuestion(questionData) {
+    // show the user-input field again
+    const mainContent = document.getElementById("main-content");
+    if (mainContent) mainContent.style.display = "flex";
+    const header = document.getElementById("header");
+    header.style.display = "none";
+    const description = document.getElementById("description");
+    description.style.display = "none";
+
+    const userInputField = document.getElementById("input-chat-area");
+    if (userInputField) userInputField.style.display = "flex";
+    userInputField.placeholder = "Enter your answer here...";
+
     const chatMessages = document.getElementById("chat-messages");
     let htmlContent = `<div class="question-container">`;
-    htmlContent += `<h2>${questionData.question}</h2>`;
-    htmlContent += `<p>${questionData.reasoning}</p>`;
+    htmlContent += `<h2 class="open-ended-question-title">${questionData.question}</h2>`;
+    htmlContent += `<p class="open-ended-question-reasoning">${questionData.reasoning}</p>`;
     htmlContent += `</div>`;
     chatMessages.innerHTML = htmlContent;
 }
@@ -145,14 +166,20 @@ function displayRecommendations(recommendationsData) {
 
   recommendationsData.recommendations.forEach((rec) => {
     htmlContent += `
-      <div class="suggested-item" style="background: #AAB5B8;background: radial-gradient(circle, rgba(178, 194, 194, 1) 0%, rgba(219, 228, 231, 1) 100%);border: 1px solid #dcdcdc;border-radius: 32px;padding: 15px;margin-bottom: 20px;width: 300px;height: 450px;">
-        <img src="${rec.image || 'https://placehold.co/400x300'}" class="item-image" alt="${rec.text}">
-        <div class="item-details">
-            <p class="item-name">${rec.text}</p>
-            <p class="item-price">${rec.price.replace('Price: ', '')}</p>
+      <div class="suggested-item">
+        <div class="item-image-container">
+          <img src="${rec.image || 'https://placehold.co/400x300'}" class="item-image" alt="${rec.text}">
         </div>
-        <p class="item-reason"><strong>Specs:</strong> ${rec.specs}</p>
-        <p class="item-reason"><strong>Ratings:</strong> ${rec.ratings.replace('Ratings: ', '')}</p>
+        <div class="item-details">
+            <h3 class="item-name">${rec.text}</h3>
+            <div class="item-meta">
+                <p class="item-price">${rec.price.replace('Price: ', '')}</p>
+                <p class="item-rating">${rec.ratings.replace('Ratings: ', '')} <span class="star-icon">★</span></p>
+            </div>
+        </div>
+        <div class="item-specs">
+            <p>${rec.specs}</p>
+        </div>
       </div>
     `;
   });

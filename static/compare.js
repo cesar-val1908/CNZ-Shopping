@@ -2,63 +2,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const compareBtn = document.getElementById("compare-btn");
     const inputsWrapper = document.querySelector(".inputs-wrapper");
     const addBtn = document.getElementById("add-btn");
-    const item1Input = document.getElementById("item1-input");
-    const item2Input = document.getElementById("item2-input");
     const resultsDiv = document.getElementById("comparison-results");
 
     const spinnerFrames = [
-        "⠁",
-        "⠂",
-        "⠄",
-        "⡀",
-        "⡈",
-        "⡐",
-        "⡠",
-        "⣀",
-        "⣁",
-        "⣂",
-        "⣄",
-        "⣌",
-        "⣔",
-        "⣤",
-        "⣥",
-        "⣦",
-        "⣮",
-        "⣶",
-        "⣷",
-        "⣿",
-        "⡿",
-        "⠿",
-        "⢟",
-        "⠟",
-        "⡛",
-        "⠛",
-        "⠫",
-        "⢋",
-        "⠋",
-        "⠍",
-        "⡉",
-        "⠉",
-        "⠑",
-        "⠡",
-        "⢁"
+        "⠁", "⠂", "⠄", "⡀", "⡈", "⡐", "⡠", "⣀", "⣁", "⣂", "⣄", "⣌", "⣔", "⣤", "⣥", "⣦", "⣮", "⣶", "⣷", "⣿", "⡿", "⠿", "⢟", "⠟", "⡛", "⠛", "⠫", "⢋", "⠋", "⠍", "⡉", "⠉", "⠑", "⠡", "⢁"
     ];
 
     addBtn.addEventListener("click", () => {
+        const newInputGroup = document.createElement("div");
+        newInputGroup.classList.add("input-group");
+
         const newInput = document.createElement("input");
         newInput.classList.add("item-input");
         newInput.type = "text";
         newInput.placeholder = "Enter item name";
-        inputsWrapper.appendChild(newInput);
-    });
-    compareBtn.addEventListener("click", async () => {
 
-        const inputs = inputsWrapper.querySelectorAll('input[type="text"]');
-        console.log("Inputs:", inputs);
-        const values = Array.from(inputs).map(input => input.value);
-        console.log("Values:", values);
-        console.log(JSON.stringify(values));
-        console.log("Values to compare:", values.toString());
+        newInputGroup.appendChild(newInput);
+        inputsWrapper.insertBefore(newInputGroup, addBtn.parentElement);
+    });
+
+    compareBtn.addEventListener("click", async () => {
+        const inputs = inputsWrapper.querySelectorAll('.item-input');
+        const values = Array.from(inputs)
+            .filter(input => input.value.trim() !== "" && input.placeholder !== "Add Another...")
+            .map(input => input.value);
+
+        if (values.length < 2) {
+            resultsDiv.innerHTML = `<p>Please enter at least two items to compare.</p>`;
+            return;
+        }
 
         let frameIndex = 0;
         resultsDiv.innerHTML = `<p id="compare-spinner"><span style="white-space:pre">${spinnerFrames[frameIndex]}</span> Loading comparison</p>`;
@@ -80,6 +52,21 @@ document.addEventListener("DOMContentLoaded", () => {
             clearInterval(spinnerInterval);
             const data = await response.json();
 
+            const compareInputs = document.querySelector(".compare-inputs");
+            if (compareInputs) {
+                compareInputs.style.display = 'none';
+            }
+
+            const header = document.querySelector('.header');
+            if (header) {
+                header.style.display = 'none';
+            }
+
+            const description = document.querySelector('.description');
+            if (description) {
+                description.style.display = 'none';
+            }
+
             if (!data.table) {
                 resultsDiv.innerHTML = `<p>Error: No comparison data returned. Please check your input or try again later.</p>`;
                 return;
@@ -89,16 +76,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 distinctions: data.distinctions,
                 recommendations: data.recommend,
                 comparison: data.table,
-
             }
 
             if (data.error) {
                 resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
             } else {
+                const sidebarResults = document.getElementById("sidebar-results");
+                sidebarResults.innerHTML = `
+                    <h3>Distinctions</h3>
+                    <p>${output.distinctions}</p>
+                    <h3>Recommendations</h3>
+                    <p>${output.recommendations}</p>
+                `;
+                sidebarResults.style.display = 'block'; // Show the sidebar
+
                 resultsDiv.innerHTML = `
                     <h3>Comparison Results</h3>
-                    <h4>Distinctions: ${output.distinctions}</h4>
-                    <h4>Recommendations: ${output.recommendations}</h4>
                     <br>
                     <div id="comparison-items-wrapper"></div>
                 `;
@@ -106,16 +99,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 const itemsWrapper = document.getElementById("comparison-items-wrapper");
 
                 output.comparison.forEach(element => {
-                    let specsTable = `<table class="specs-table"><thead>`;
-
-                    Object.entries(element.specs).forEach(([name, value]) => {
-                        specsTable += `<tr>
-                            <td>${name}</td>
-                            <td>${value}</td>
-                        </tr>`
+                    let specsHtml = '';
+                    element.specs.forEach(group => {
+                        specsHtml += `<h5 class="spec-group-name">${group.groupName}</h5>`;
+                        specsHtml += `<div class="specs-group">`;
+                        group.stats.forEach(stat => {
+                            let statClass = '';
+                            if (stat.status === 'good') {
+                                statClass = 'good-stat';
+                            } else if (stat.status === 'bad') {
+                                statClass = 'bad-stat';
+                            }
+                            specsHtml += `
+                                <div class="spec-item ${statClass}">
+                                    <span class="spec-name">${stat.name}:</span>
+                                    <span class="spec-value">${stat.value}</span>
+                                    ${stat.indicator ? `<span class="spec-indicator">${stat.indicator}</span>` : ''}
+                                </div>
+                            `;
+                        });
+                        specsHtml += `</div>`;
                     });
-
-                    specsTable += `</thead></table>`;
 
                     itemsWrapper.innerHTML += `
                         <div class="comparison-item">
@@ -124,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <p class="pros"> Pros: ${element.pros}</p>
                             <p class="cons"> Cons: ${element.cons}</p>
                             <br></br>
-                            ${specsTable}
+                            ${specsHtml}
                         </div>
                     `;
                 });
