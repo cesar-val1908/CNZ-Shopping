@@ -9,7 +9,7 @@ function fetchResponse(userMessage) {
   if (chatMessages) {
     chatMessages.style.display = "flex";
     chatMessages.style.justifyContent = "left";
-    chatMessages.style.alignItems = "left";
+    chatMessages.style.alignItems = "center";
   }
   let frameIndex = 0;
   chatMessages.innerHTML = `<div class="spinner-container" style="font-size: 3em;">${spinnerFrames[frameIndex]}</div>`;
