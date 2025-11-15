@@ -13,11 +13,12 @@ SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 # Cache to avoid duplicate SerpAPI calls
 product_cache = {}
 
+
 def build_prompt(event_type, rejected_items, accepted_items, count=1):
     base = f"""
 You are a helpful shopping assistant. A user is preparing for an {event_type}.
 
-Recommend {count} essential item{'s' if count > 1 else ''}.
+Recommend {count} essential item{"s" if count > 1 else ""}.
 Do NOT include any of the following:
 {json.dumps(rejected_items + accepted_items)}
 
@@ -39,11 +40,7 @@ def get_real_product_data(query):
     if query in product_cache:
         return product_cache[query]
 
-    params = {
-        "engine": "google_shopping",
-        "q": query,
-        "api_key": SERPAPI_KEY
-    }
+    params = {"engine": "google_shopping", "q": query, "api_key": SERPAPI_KEY}
     try:
         response = requests.get("https://serpapi.com/search", params=params, timeout=10)
         results = response.json()
@@ -63,7 +60,7 @@ def get_real_product_data(query):
         result = {
             "price_low": min(prices) if prices else None,
             "price_high": max(prices) if prices else None,
-            "image": image_url
+            "image": image_url,
         }
         product_cache[query] = result  # Save to cache
         return result
@@ -78,7 +75,7 @@ def clean_item(raw_item):
             "item": raw_item["item"].strip(),
             "reason": raw_item.get("reason", "No description provided.").strip(),
             "price_low": raw_item.get("price_low"),
-            "price_high": raw_item.get("price_high")
+            "price_high": raw_item.get("price_high"),
         }
     except (KeyError, AttributeError):
         return None
@@ -88,14 +85,14 @@ def recommend_items(event, accepted, rejected, count=1):
     prompt = build_prompt(event, accepted, rejected, count)
     messages = [
         {"role": "system", "content": "You're a helpful shopping assistant."},
-        {"role": "user", "content": prompt}
+        {"role": "user", "content": prompt},
     ]
 
     try:
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=messages,
-            temperature=0.2  # lower temp for consistency
+            temperature=0.2,  # lower temp for consistency
         )
         raw = response.choices[0].message.content.strip()
 
@@ -151,8 +148,8 @@ def recommend_next_item(event, accepted, rejected):
 
 
 def print_item(item):
-    if item['price_low'] is not None and item['price_high'] is not None:
-        if item['price_low'] == item['price_high']:
+    if item["price_low"] is not None and item["price_high"] is not None:
+        if item["price_low"] == item["price_high"]:
             price_str = f"(${item['price_low']:.2f})"
         else:
             price_str = f"(from ${item['price_low']:.2f} - ${item['price_high']:.2f})"

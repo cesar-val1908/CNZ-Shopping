@@ -1,4 +1,6 @@
 {
     "IDX.aI.enableInlineCompletion": true,
-    "IDX.aI.enableCodebaseIndexing": true
+    "IDX.aI.enableCodebaseIndexing": true,
+    "chat.editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace",
+    "chat.fontFamily": "'Droid Sans Mono', 'monospace', monospace"
 }
