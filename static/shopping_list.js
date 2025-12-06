@@ -54,14 +54,14 @@ document.addEventListener("DOMContentLoaded", () => {
       let content;
       if (typeof response === 'string') {
         content = response;
-      } else if (response && response.result && response.result.message) {
-        content = response.result.message.content;
+      } else if (response && response.message && response.message.content) {
+        content = response.message.content;
+        //console.log(response.message.content);
       } else {
         return "N/A";
       }
 
-      const priceMatch = content.match(/\$\d{1,3}(,\d{3})*(\.\d{2})?\s*-\s*\$\d{1,3}(,\d{3})*(\.\d{2})?/);
-      return priceMatch ? priceMatch[0] : "N/A";
+      return content
     } catch (error) {
       console.error("Error getting product data from Perplexity:", error);
       return "N/A";
