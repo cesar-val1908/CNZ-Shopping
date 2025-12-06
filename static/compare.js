@@ -55,6 +55,19 @@ document.addEventListener("DOMContentLoaded", () => {
     inputsWrapper.insertBefore(newInputGroup, addBtn.parentElement);
   });
 
+  async function getPerplexityItemData(itemName) {
+    try {
+      const response = await puter.ai.chat(
+        `Get product data for "${itemName}". Include specs, price, pros, and cons.`,
+        { model: "perplexity/sonar" }
+      );
+      return { item: itemName, ...response };
+    } catch (error) {
+      console.error(`Error getting data for ${itemName}:`, error);
+      return { item: itemName, error: "Failed to fetch data" };
+    }
+  }
+
   compareBtn.addEventListener("click", async () => {
     const inputs = inputsWrapper.querySelectorAll(".item-input");
     const values = Array.from(inputs)
@@ -78,12 +91,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 70);
 
     try {
+      const itemDataPromises = values.map(getPerplexityItemData);
+      const itemData = await Promise.all(itemDataPromises);
+
       const response = await fetch("/compare-items", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ items: values }),
+        body: JSON.stringify({ items: itemData }),
       });
 
       clearInterval(spinnerInterval);
