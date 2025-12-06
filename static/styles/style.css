@@ -78,6 +78,9 @@
     --color-success-bg: #aaffaa;
     --color-success-bg-light: #deffe2;
     --color-success-text: #006600;
+    --color-good-dark: #28a745; /* Darker green for good stats */
+    --color-bad-light: #ffc107; /* Light orange/yellow for bad stats */
+    --color-neutral: #f8f9fa; /* Light gray for neutral stats */
 
     /* Accent colors */
     --color-accent-yellow: #ddb81f;
@@ -197,7 +200,7 @@ body {
     content: "";
     position: absolute;
     top: 0;
-    height: 24%;
+    height: 17%;
     left: -5px;
     border-left: 10px solid var(--color-bg-primary);
     z-index: 1;
@@ -207,7 +210,7 @@ body {
     content: "";
     position: absolute;
     top: 0;
-    height: 24%;
+    height: 17%;
     right: -5px;
     border-left: 10px solid var(--color-bg-primary);
     z-index: 1;
@@ -633,7 +636,7 @@ body {
 }
 
 .sidebar-results p {
-    color: var(--color-text-gray);
+    color: #ccc;
     line-height: 1.5;
 }
 
@@ -666,15 +669,21 @@ body {
 }
 
 .spec-item.good-stat {
-    background-color: var(--color-success); /* Light green */
-    border: 1px solid var(--color-success);
-    color: var(--color-text-subdued);
+    background-color: var(--color-good-dark); /* Darker green */
+    border: 1px solid var(--color-good-dark);
+    color: var(--color-white); /* White text for contrast */
 }
 
 .spec-item.bad-stat {
-    background-color: var(--color-success-light); /* Light red */
-    border: 1px solid var(--color-success-light);
-    color: var(--color-text-subdued);
+    background-color: var(--color-bad-light); /* Light orange/yellow */
+    border: 1px solid var(--color-bad-light);
+    color: var(--color-text-dark); /* Dark text for contrast */
+}
+
+.spec-item.neutral-stat {
+    background-color: var(--color-neutral); /* Light gray */
+    border: 1px solid var(--color-neutral);
+    color: var(--color-text-gray-medium);
 }
 
 .spec-name {
@@ -771,9 +780,15 @@ body {
     align-self: flex-start;
     margin-left: 5%;
     font-family: "SF Pro Display", sans-serif;
-    font-size: 4rem;
+    font-size: 2rem;
     font-weight: 100;
     font-style: italic;
+    background: var(--color-accent-light);
+    padding: 35px;
+    border-radius: 25px;
+    max-width: 300px;
+    color: #00000080;
+    box-shadow: rgba(3, 4, 14, 0.04) 0px 22px 70px 4px;
 }
 
 .todo-items {
@@ -782,17 +797,7 @@ body {
     width: 80%;
 }
 
-.todo-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid var(--color-border-light-gray);
-    background-color: var(--color-bg-tertiary);
-    border-radius: 12px;
-    font-size: 0.8em;
-    font-family: "JetBrains Mono", monospace;
-    border: 1px solid var(--color-border-input-light);
-}
+
 
 .todo-item input[type="checkbox"] {
     margin-right: 15px;
@@ -813,7 +818,7 @@ body {
     border-radius: 30px;
     padding: 10px;
     margin-bottom: 1.5rem;
-    width: 330px;
+    width: 433px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
@@ -946,8 +951,9 @@ body {
     color: var(--color-text-gray);
     font-family: inherit;
     border-radius: 12px;
-    margin-top: 30px;
+    /*! margin-top: 30px; */
     font-family: "JetBrains Mono", monospace;
+    /*! position: fixed; */
 }
 
 .todo-item.completed .item-text {

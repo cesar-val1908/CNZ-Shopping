@@ -1,8 +1,10 @@
 import os
-from flask import Flask, jsonify, request, session, render_template
+import json
+from flask import Flask, jsonify, request, session, render_template, Response
 from dotenv import load_dotenv
 from Compare import get_comparison
 from chatbot import ai_bot_response
+from apis.serp_api import get_serp_image_url
 
 
 load_dotenv()
@@ -45,9 +47,10 @@ def get_response():
     bot_response = ai_bot_response(user_input, conversation_history)
 
     # Update history and return the assistant's reply
-    conversation_history.append({"role": "user", "content": user_input})
-    conversation_history.append({"role": "assistant", "content": bot_response})
-    session["conversation_history"] = conversation_history
+    if bot_response and bot_response != json.dumps({"type": "noop"}):
+        conversation_history.append({"role": "user", "content": user_input})
+        conversation_history.append({"role": "assistant", "content": bot_response})
+        session["conversation_history"] = conversation_history
     return jsonify({"response": bot_response})
 
 
@@ -70,6 +73,17 @@ def get_shopping_list_item():
         return jsonify(item)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route("/get_image_serp")
+def get_image_serp():
+    item_name = request.args.get("item_name")
+    if not item_name:
+        return jsonify({"error": "Missing item_name parameter"}), 400
+    image_url = get_serp_image_url(item_name)
+    if image_url:
+        return jsonify({"image_url": image_url})
+    return jsonify({"image_url": None}), 404
 
 
 if __name__ == "__main__":

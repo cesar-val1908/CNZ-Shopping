@@ -1,7 +1,6 @@
 import os
 import json
 from openai import OpenAI
-from shopping_list import get_real_product_data
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -135,7 +134,6 @@ def ai_bot_response(msg, history):
                 "required": ["recommendations"],
             },
         },
-        {"type": "web_search_preview"},
     ]
 
     resp = client.responses.create(model="gpt-4o", input=messages, tools=tools)
@@ -177,27 +175,29 @@ def ai_bot_response(msg, history):
                     )
 
                 case "addUserRequirement":
+                    requirement = args.get("requirement")
+                    if "requirement added" in requirement.lower():
+                        return json.dumps({"type": "noop"})
                     return json.dumps(
                         {
                             "type": "user_requirement",
-                            "requirement": args.get("requirement"),
+                            "requirement": requirement,
                         }
                     )
 
                 case "addUserConstraint":
+                    constraint = args.get("constraint")
+                    if "constraint added" in constraint.lower():
+                        return json.dumps({"type": "noop"})
                     return json.dumps(
                         {
                             "type": "user_constraint",
-                            "constraint": args.get("constraint"),
+                            "constraint": constraint,
                         }
                     )
 
                 case "recommendations":
                     recs = args.get("recommendations", [])
-                    for rec in recs:
-                        product = get_real_product_data(rec["text"])
-                        rec["image"] = product.get("image")
-
                     return json.dumps(
                         {
                             "type": "recommendations_list",
@@ -270,9 +270,6 @@ def ai_bot_response(msg, history):
             # Recommendations
             elif obj_type == "recommendations" and "recommendations" in obj:
                 recs = obj.get("recommendations", [])
-                for rec in recs:
-                    product = get_real_product_data(rec["text"])
-                    rec["image"] = product.get("image")
                 obj["type"] = "recommendations_list"
 
             return json.dumps(obj)

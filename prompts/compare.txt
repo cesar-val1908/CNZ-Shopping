@@ -16,7 +16,7 @@ Rules to follow:
 - A stat is "bad" if it is objectively inferior compared to other items.
 - A stat is "neutral" if it is neither objectively superior nor inferior, or if all items are the same for that characteristic.
 - Ensure there is never more than one "good" status per characteristic across all items.
-- Never assign "good" or "bad" status to the price characteristic; it should always be "neutral". 
+- Never assign "good" or "bad" status to the price characteristic; it should always be "neutral".
 
 3. List important distinctions not covered or fully explained in the specs or pros/cons.
 - Provide this as a clear string in the "distinctions" field of the JSON.
@@ -30,7 +30,7 @@ Rules to follow:
 - Provide clear, specific recommendations in the "recommend" field, each recommendation seperated by a "|".
 - You must include a recommendation of the overall best product that takes specs, pros/cons, distinctions, and price to find the best product.
 - You must include a recommendation based of the best affordable option that still must must consider specs, pros/cons, and distinctions.
-- Explain why the recommended item is the best choice, referencing key specs, pros, or distinctions.  
+- Explain why the recommended item is the best choice, referencing key specs, pros, or distinctions.
 
 6. Webscraping instructions:
 - For each item, do an independent search that MUST align with the name given. *** DO NOT over simplifiy and choose a similar product***

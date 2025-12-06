@@ -100,10 +100,23 @@ function hideSpinner() {
 function sendMessage(msg) {
   showSpinner();
 
+  let context = "";
+  if (requirements.length > 0) {
+    context += "Current Requirements:\n- " + requirements.join("\n- ") + "\n\n";
+  }
+  if (constraints.length > 0) {
+    context += "Current Constraints:\n- " + constraints.join("\n- ") + "\n\n";
+  }
+  if (sources.length > 0) {
+    context += "Current Sources:\n- " + sources.map(s => `${s.name}: ${s.url}`).join("\n- ") + "\n\n";
+  }
+
+  const fullMessage = context + "User message: " + msg;
+
   fetch("/get_response", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user_input: msg }),
+    body: JSON.stringify({ user_input: fullMessage }),
   })
     .then((res) => res.json())
     .then((data) => {
@@ -342,7 +355,7 @@ function handleResponse(resp, raw) {
 
     case "user_report":
     case "report_user":
-      showReport(resp.message);
+      // showReport(resp.message);
       continueConvo();
       break;
 
@@ -445,40 +458,57 @@ function showOpenEnded(data) {
   const chatInput = document.getElementById("chat-input-area");
   const userInput = document.getElementById("user-input");
 
-  chat.innerHTML = `
-    <div class="question-container">
-      <h2 class="open-ended-question-title">${data.question}</h2>
-      <p class="open-ended-question-reasoning">${data.reasoning}</p>
-    </div>
-  `;
+  if (header) {
+    header.innerHTML = `<h2 class="open-ended-question-title">${data.question}</h2>`;
+    header.style.display = "block";
+  }
+  if (desc) {
+    desc.innerHTML = `<p class="open-ended-question-reasoning">${data.reasoning}</p>`;
+    desc.style.display = "block";
+  }
 
-  chat.style.display = "flex";
-  chat.style.justifyContent = "flex-start";
-  chat.style.alignItems = "flex-start";
+  chat.style.display = "none";
 
-  if (header) header.style.display = "none";
-  if (desc) desc.style.display = "none";
   if (main) main.style.display = "flex";
   if (chatInput) chatInput.style.display = "flex";
   if (userInput) userInput.placeholder = "Enter your answer here...";
 }
 
-function showResults(data) {
+async function getPerplexityProductData(itemName) {
+  try {
+    const response = await fetch(`/get_image_serp?item_name=${encodeURIComponent(itemName)}`);
+    if (!response.ok) {
+      console.error(`Error fetching image from SerpAPI: ${response.statusText}`);
+      return null;
+    }
+    const data = await response.json();
+    return { image: data.image_url };
+  } catch (error) {
+    console.error("Error getting product data from SerpAPI:", error);
+    return null;
+  }
+}
+
+async function showResults(data) {
   const chat = document.getElementById("chat-messages");
+  chat.innerHTML = `<div class="recommendations-wrapper">
+    <h2>Here are your recommendations:</h2>
+    <div class="recommendations-container"></div>
+  </div>`;
 
-  let html = `<div class="recommendations-wrapper">`;
-  html += "<h2>Here are your recommendations:</h2>";
-  html += '<div class="recommendations-container">';
+  const container = chat.querySelector(".recommendations-container");
+  const itemHtmlArray = [];
 
-  data.recommendations.forEach((rec) => {
-    const img = rec.image || "https://placehold.co/400x300";
+  for (const rec of data.recommendations) {
+    const productData = await getPerplexityProductData(rec.text);
+    const img = productData?.image || "https://placehold.co/400x300";
     const price = rec.price.replace("Price: ", "");
     const rating = rec.ratings.replace("Ratings: ", "");
 
-    html += `
+    itemHtmlArray.push(`
       <div class="suggested-item">
         <div class="item-image-container">
-          <img src="${img}" class="item-image" alt="${rec.text}">
+          <img src="${img}" class="item-image" alt="${rec.text}" onerror="this.onerror=null;this.src='https://placehold.co/400x300';">
         </div>
         <div class="item-details">
           <h3 class="item-name">${rec.text}</h3>
@@ -491,11 +521,9 @@ function showResults(data) {
           <p class="item-specs-text">${rec.specs}</p>
         </div>
       </div>
-    `;
-  });
-
-  html += "</div></div>";
-  chat.innerHTML = html;
+    `);
+  }
+  container.innerHTML = itemHtmlArray.join("");
 
   requirements = [];
   constraints = [];
