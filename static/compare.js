@@ -156,11 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
             <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
           </svg>
         `;
-        sidebarResults.appendChild(sidebarToggle);
+        document.body.appendChild(sidebarToggle);
 
         // 3. Add click event listener to toggle the 'collapsed' class
         sidebarToggle.addEventListener("click", () => {
           sidebarResults.classList.toggle("collapsed");
+          sidebarToggle.classList.toggle("collapsed");
         });
 
         sidebarResults.style.display = "block"; // Show the sidebar

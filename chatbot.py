@@ -276,4 +276,11 @@ def ai_bot_response(msg, history):
         except json.JSONDecodeError:
             pass
 
-    return resp.output_text
+    return json.dumps(
+        {
+            "type": "question_open_ended",
+            "question": resp.output_text,
+            "reasoning": "The previous message could not be parsed, please try again.",
+            "original_message": msg,
+        }
+    )
