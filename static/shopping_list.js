@@ -47,21 +47,29 @@ document.addEventListener("DOMContentLoaded", () => {
   async function getPerplexityProductData(itemName) {
     try {
       const response = await puter.ai.chat(
-        `What is the average price range for a "${itemName}"? Respond with a single price range, like "$10-$20".`,
-        { model: "perplexity/sonar" }
+        `What is the average price range for a "${itemName}"?
+
+Respond with ONLY a price range.
+
+Good example:
+$10-$20
+
+Bad example:
+The average price for a foo is about $10-$20.`,
+        { model: "perplexity/sonar" },
       );
       console.log("Perplexity AI Chat Response:", response);
       let content;
-      if (typeof response === 'string') {
+      if (typeof response === "string") {
         content = response;
-      } else if (response && response.result && response.result.message) {
-        content = response.result.message.content;
+      } else if (response && response.message && response.message.content) {
+        content = response.message.content;
+        //console.log(response.message.content);
       } else {
         return "N/A";
       }
 
-      const priceMatch = content.match(/\$\d{1,3}(,\d{3})*(\.\d{2})?\s*-\s*\$\d{1,3}(,\d{3})*(\.\d{2})?/);
-      return priceMatch ? priceMatch[0] : "N/A";
+      return content;
     } catch (error) {
       console.error("Error getting product data from Perplexity:", error);
       return "N/A";
@@ -77,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         event: currentEvent,
-        accepted: accepted.map(i => i.item),
+        accepted: accepted.map((i) => i.item),
         rejected: rejected,
       }),
     });
@@ -91,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const productData = await getPerplexityProductData(data.item);
-    
+
     if (productData) {
       data.price = productData;
     }
@@ -113,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       li.innerHTML = `
-                ${item.image ? `<div class="item-image-container"><img class="item-image" src="${item.image}" alt="${item.item}"></div>` : ''}
+                ${item.image ? `<div class="item-image-container"><img class="item-image" src="${item.image}" alt="${item.item}"></div>` : ""}
                 <div class="item-details">
                   <div class="todo-checkbox-wrapper">
                     <span class="todo-checkbox">
@@ -125,9 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
                   </div>
                   <div class="item-text">
                       <span class="item-name">${item.item}</span>
-                      <span class="item-reason">${item.reason ? `- ${item.reason}` : ''}</span>
+                      <span class="item-reason">${item.reason ? `- ${item.reason}` : ""}</span>
                   </div>
-                  <span class="item-price">${item.price ? item.price : 'N/A'}</span>
+                  <span class="item-price">${item.price ? item.price : "N/A"}</span>
                   <button class="search-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#444"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/></svg>
                   </button>
@@ -137,13 +145,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const checkboxInput = li.querySelector("input[type='checkbox']");
       if (checkboxInput) {
-        checkboxInput.addEventListener(
-          "change",
-          () => {
-            accepted[index].completed = !accepted[index].completed;
-            renderTodoList();
-          },
-        );
+        checkboxInput.addEventListener("change", () => {
+          accepted[index].completed = !accepted[index].completed;
+          renderTodoList();
+        });
       }
 
       const deleteBtn = li.querySelector(".delete-btn");
