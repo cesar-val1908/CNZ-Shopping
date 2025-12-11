@@ -508,8 +508,18 @@ async function showResults(data) {
     itemHtmlArray.push(`
       <div class="suggested-item">
         <div class="item-image-container">
-          <img src="${img}" class="item-image" alt="${rec.text}" onerror="this.onerror=null;this.src='https://placehold.co/400x300';">
+          <a href="https://www.google.com/search?tbm=shop&q=${encodeURIComponent(rec.text)}" 
+            target="_blank" 
+            rel="noopener noreferrer">
+            <img 
+              src="${img}" 
+              class="item-image" 
+              alt="${rec.text}"
+              style="cursor: pointer;"
+            >
+          </a>
         </div>
+
         <div class="item-details">
           <h3 class="item-name">${rec.text}</h3>
           <div class="item-meta">
